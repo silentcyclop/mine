@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>For You</title>
+
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="For You">
+<link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='22' fill='%230d0609'/%3E%3Ctext x='50' y='68' font-size='55' text-anchor='middle'%3E%E2%9D%A4%EF%B8%8F%3C/text%3E%3C/svg%3E">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,500&family=Quicksand:wght@400;500;600&display=swap" rel="stylesheet">
+
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+
+  html, body {
+    height: 100%;
+    background: #0a0508;
+    overflow: hidden;
+    font-family: 'Quicksand', sans-serif;
+  }
+
+  #canvas {
+    position: fixed;
+    inset: 0;
+    display: block;
+  }
+
+  .overlay {
+    position: fixed;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-end;
+    padding-bottom: 8vh;
+    pointer-events: none;
+    z-index: 5;
+  }
+
+  .message {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-weight: 500;
+    font-size: 1.35rem;
+    color: #ffd9e3;
+    text-align: center;
+    padding: 0 2.2rem;
+    line-height: 1.6;
+    opacity: 0;
+    text-shadow: 0 0 20px rgba(255, 130, 160, 0.4);
+    transition: opacity 1.8s ease;
+  }
+
+  .message.show { opacity: 1; }
+
+  .signature {
+    margin-top: 1rem;
+    font-size: 0.75rem;
+    letter-spacing: 0.15em;
+    color: #a8697d;
+    opacity: 0;
+    transition: opacity 1.8s ease 0.4s;
+  }
+
+  .signature.show { opacity: 1; }
+
+  .tap-hint {
+    position: fixed;
+    top: 6vh;
+    width: 100%;
+    text-align: center;
+    font-size: 0.68rem;
+    letter-spacing: 0.1em;
+    color: #6b4655;
+    opacity: 0.8;
+    z-index: 5;
+    pointer-events: none;
+  }
+
+  .replay-btn {
+    position: fixed;
+    top: 3.2vh;
+    right: 5vw;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    border: 1px solid rgba(255, 217, 227, 0.25);
+    background: rgba(255, 255, 255, 0.04);
+    color: #ffd9e3;
+    font-size: 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 6;
+  }
+</style>
+</head>
+<body>
+
+<canvas id="canvas"></canvas>
+
+<div class="tap-hint">tap anywhere for another one</div>
+<button class="replay-btn" id="replayBtn" title="Watch it form again">↺</button>
+
+<div class="overlay">
+  <div class="message" id="message"></div>
+  <div class="signature" id="signature">— always yours, mari</div>
+</div>
+
+<script>
+  // ====== Sweet messages — edit freely, add as many as you want ======
+  const messages = [
+    "Every heartbeat since I met you has had your name on it, Shawn.",
+    "I built this because words in a text never feel like enough, baby.",
+    "You're the calm in my chaos and the reason I smile at my phone.",
+    "No matter the distance, my heart keeps finding its way to you.",
+    "I love you in every version of ordinary and every version of us.",
+    "You make loving someone feel easy. Thank you for being you, baby.",
+    "If you're reading this, I was thinking of you right before, Shawn.",
+    "Some people search for home. I just found you instead.",
+    "Since April 26th, every day has just been better with you in it.",
+    "Baby, you don't have to do anything to be loved this much. Just exist.",
+    "Shawn, you're my favorite notification.",
+    "This heart is made of a thousand tiny reasons I chose you, and keep choosing you.",
+  ];
+  // =====================================================================
+
+  const messageEl = document.getElementById('message');
+  const signatureEl = document.getElementById('signature');
+
+  function showMessage() {
+    messageEl.classList.remove('show');
+    signatureEl.classList.remove('show');
+
+    // rotate: avoid repeating the same one twice in a row
+    let idx = Math.floor(Math.random() * messages.length);
+    const lastIdx = parseInt(sessionStorage.getItem('lastMsgIdx') || '-1');
+    if (messages.length > 1 && idx === lastIdx) {
+      idx = (idx + 1) % messages.length;
+    }
+    sessionStorage.setItem('lastMsgIdx', idx);
+
+    setTimeout(() => {
+      messageEl.textContent = messages[idx];
+      messageEl.classList.add('show');
+      signatureEl.classList.add('show');
+    }, 300);
+  }
+
+  document.addEventListener('click', (e) => {
+    if (e.target.closest('#replayBtn')) return;
+    showMessage();
+  });
+
+  document.getElementById('replayBtn').addEventListener('click', (e) => {
+    e.stopPropagation();
+    replayFormation();
+  });
+
+  // ---------- Heart particle animation ----------
+  const canvas = document.getElementById('canvas');
+  const ctx = canvas.getContext('2d');
+  let W, H, DPR;
+
+  function resize() {
+    DPR = Math.min(window.devicePixelRatio || 1, 2);
+    W = window.innerWidth;
+    H = window.innerHeight;
+    canvas.width = W * DPR;
+    canvas.height = H * DPR;
+    canvas.style.width = W + 'px';
+    canvas.style.height = H + 'px';
+    ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
+  }
+  resize();
+  window.addEventListener('resize', resize);
+
+  // heart parametric function, scaled to fit screen
+  function heartPoint(t, scale) {
+    const x = 16 * Math.pow(Math.sin(t), 3);
+    const y = -(13 * Math.cos(t) - 5 * Math.cos(2*t) - 2 * Math.cos(3*t) - Math.cos(4*t));
+    return { x: x * scale, y: y * scale };
+  }
+
+  const PARTICLE_COUNT = 700;
+  let particles = [];
+
+  function initParticles() {
+    particles = [];
+    const scale = Math.min(W, H) / 34;
+    const cx = W / 2;
+    const cy = H / 2 - H * 0.04;
+
+    for (let i = 0; i < PARTICLE_COUNT; i++) {
+      const t = (i / PARTICLE_COUNT) * Math.PI * 2;
+      const jitter = (Math.random() - 0.5) * 0.06;
+      const pt = heartPoint(t + jitter, scale * (0.94 + Math.random() * 0.12));
+
+      particles.push({
+        tx: cx + pt.x,
+        ty: cy + pt.y,
+        x: Math.random() * W,
+        y: Math.random() * H,
+        size: Math.random() * 1.8 + 0.6,
+        speed: Math.random() * 0.025 + 0.012,
+        hue: 335 + Math.random() * 20,
+        twinkle: Math.random() * Math.PI * 2,
+        floatAmp: Math.random() * 3 + 1,
+        floatSpeed: Math.random() * 0.02 + 0.01
+      });
+    }
+  }
+  initParticles();
+  window.addEventListener('resize', initParticles);
+
+  let frame = 0;
+
+  function animate() {
+    frame++;
+    ctx.fillStyle = 'rgba(10, 5, 8, 0.25)';
+    ctx.fillRect(0, 0, W, H);
+
+    for (const p of particles) {
+      p.x += (p.tx - p.x) * p.speed;
+      p.y += (p.ty - p.y) * p.speed;
+
+      const floatY = Math.sin(frame * p.floatSpeed + p.twinkle) * p.floatAmp;
+      const twinkleAlpha = 0.55 + Math.sin(frame * 0.04 + p.twinkle) * 0.35;
+
+      ctx.beginPath();
+      ctx.fillStyle = `hsla(${p.hue}, 85%, 70%, ${Math.max(0.15, twinkleAlpha)})`;
+      ctx.shadowColor = `hsla(${p.hue}, 90%, 65%, 0.8)`;
+      ctx.shadowBlur = 6;
+      ctx.arc(p.x, p.y + floatY, p.size, 0, Math.PI * 2);
+      ctx.fill();
+    }
+
+    requestAnimationFrame(animate);
+  }
+
+  ctx.fillStyle = '#0a0508';
+  ctx.fillRect(0, 0, W, H);
+  animate();
+
+  function replayFormation() {
+    messageEl.classList.remove('show');
+    signatureEl.classList.remove('show');
+
+    for (const p of particles) {
+      p.x = Math.random() * W;
+      p.y = Math.random() * H;
+    }
+
+    setTimeout(showMessage, 2600);
+  }
+
+  // show first message shortly after particles settle
+  setTimeout(showMessage, 2600);
+</script>
+
+</body>
+</html>
