@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>His Love, Logged</title>
+
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="His Love Log">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+
+  body {
+    min-height: 100vh;
+    background: radial-gradient(circle at 50% 0%, #2a1420 0%, #170a12 45%, #0d0609 100%);
+    font-family: 'Quicksand', sans-serif;
+    color: #f3d9e0;
+    padding: 2.2rem 1.3rem 4rem;
+  }
+
+  h1 {
+    font-family: 'Cormorant Garamond', serif;
+    font-weight: 600;
+    font-size: 1.7rem;
+    text-align: center;
+    margin-bottom: 0.3rem;
+    color: #f6e3ea;
+  }
+
+  .sub {
+    text-align: center;
+    font-size: 0.75rem;
+    color: #a8697d;
+    margin-bottom: 2rem;
+  }
+
+  .summary {
+    display: flex;
+    justify-content: center;
+    gap: 2.5rem;
+    margin-bottom: 2.2rem;
+  }
+
+  .stat {
+    text-align: center;
+  }
+
+  .stat .num {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 2.1rem;
+    font-weight: 600;
+    color: #ff9db3;
+  }
+
+  .stat .label {
+    font-size: 0.65rem;
+    letter-spacing: 0.08em;
+    color: #a8697d;
+    text-transform: uppercase;
+  }
+
+  .feed {
+    max-width: 480px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 0.7rem;
+  }
+
+  .entry {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    background: rgba(255,255,255,0.035);
+    border: 1px solid rgba(255, 157, 179, 0.12);
+    border-radius: 14px;
+    padding: 0.85rem 1rem;
+  }
+
+  .entry .heart-icon {
+    font-size: 1.1rem;
+    flex-shrink: 0;
+  }
+
+  .entry .text {
+    flex: 1;
+  }
+
+  .entry .rel-time {
+    font-size: 0.88rem;
+    color: #f3d9e0;
+  }
+
+  .entry .abs-time {
+    font-size: 0.68rem;
+    color: #8a5b6b;
+    margin-top: 0.1rem;
+  }
+
+  .entry.latest {
+    border-color: rgba(255, 157, 179, 0.4);
+    background: rgba(255, 157, 179, 0.06);
+  }
+
+  .empty {
+    text-align: center;
+    color: #8a5b6b;
+    font-size: 0.85rem;
+    margin-top: 3rem;
+    padding: 0 2rem;
+    line-height: 1.6;
+  }
+
+  .refresh {
+    display: block;
+    margin: 2.5rem auto 0;
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255, 157, 179, 0.25);
+    color: #f3d9e0;
+    font-family: 'Quicksand', sans-serif;
+    font-size: 0.8rem;
+    padding: 0.6rem 1.4rem;
+    border-radius: 999px;
+  }
+
+  .loading {
+    text-align: center;
+    color: #a8697d;
+    font-size: 0.8rem;
+    margin-top: 3rem;
+  }
+</style>
+</head>
+<body>
+
+<h1>His Love, Logged 🤍</h1>
+<div class="sub">Every time Shawn thought of you</div>
+
+<div class="summary" id="summary" style="display:none;">
+  <div class="stat">
+    <div class="num" id="totalCount">0</div>
+    <div class="label">Total Taps</div>
+  </div>
+  <div class="stat">
+    <div class="num" id="weekCount">0</div>
+    <div class="label">This Week</div>
+  </div>
+</div>
+
+<div id="feedContainer">
+  <div class="loading">loading your love log...</div>
+</div>
+
+<button class="refresh" id="refreshBtn">↺ refresh</button>
+
+<script>
+  // Same bin as thinking-of-you.html
+  const JSONBIN_ID = "6a53edd2da38895dfe53a3fa";
+  const JSONBIN_API_KEY = "$2a$10$U8nlsm..q4/o4sQkHKH7OOYGYmGHfjKVx6Mgasf.fWJO1sZ4Vaym6";
+
+  const feedContainer = document.getElementById('feedContainer');
+  const summaryEl = document.getElementById('summary');
+  const totalCountEl = document.getElementById('totalCount');
+  const weekCountEl = document.getElementById('weekCount');
+
+  function relativeTime(iso) {
+    const now = new Date();
+    const then = new Date(iso);
+    const diffMs = now - then;
+    const mins = Math.floor(diffMs / 60000);
+    const hrs = Math.floor(mins / 60);
+    const days = Math.floor(hrs / 24);
+
+    if (mins < 1) return "just now";
+    if (mins < 60) return `${mins} min${mins === 1 ? '' : 's'} ago`;
+    if (hrs < 24) return `${hrs} hour${hrs === 1 ? '' : 's'} ago`;
+    if (days < 7) return `${days} day${days === 1 ? '' : 's'} ago`;
+    return then.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+  }
+
+  function absTime(iso) {
+    const d = new Date(iso);
+    return d.toLocaleString('en-US', {
+      weekday: 'short', month: 'short', day: 'numeric',
+      hour: 'numeric', minute: '2-digit'
+    });
+  }
+
+  async function loadFeed() {
+    feedContainer.innerHTML = '<div class="loading">loading your love log...</div>';
+    summaryEl.style.display = 'none';
+
+    try {
+      const res = await fetch(`https://api.jsonbin.io/v3/b/${JSONBIN_ID}/latest`, {
+        headers: { "X-Master-Key": JSONBIN_API_KEY }
+      });
+      const data = await res.json();
+      const record = data.record || {};
+      let taps = record.thinkingOfYouTaps || [];
+      const heartOpens = record.heartOpens || [];
+
+      // Merge both sources into one feed, tagging their origin
+      const merged = [
+        ...taps.map(t => ({ time: t.time, type: 'tap' })),
+        ...heartOpens.map(t => ({ time: t.time, type: 'heart' }))
+      ].sort((a, b) => new Date(b.time) - new Date(a.time));
+
+      if (merged.length === 0) {
+        feedContainer.innerHTML = `<div class="empty">No taps yet — once Shawn opens the button or the heart page, they'll show up here 🤍</div>`;
+        return;
+      }
+
+      const now = new Date();
+      const weekAgo = new Date(now - 7 * 24 * 60 * 60 * 1000);
+      const weekCount = merged.filter(m => new Date(m.time) > weekAgo).length;
+
+      totalCountEl.textContent = merged.length;
+      weekCountEl.textContent = weekCount;
+      summaryEl.style.display = 'flex';
+
+      feedContainer.innerHTML = `<div class="feed">${merged.map((m, i) => `
+        <div class="entry ${i === 0 ? 'latest' : ''}">
+          <div class="heart-icon">${m.type === 'heart' ? '💗' : '🤍'}</div>
+          <div class="text">
+            <div class="rel-time">${relativeTime(m.time)}</div>
+            <div class="abs-time">${absTime(m.time)}</div>
+          </div>
+        </div>
+      `).join('')}</div>`;
+
+    } catch (e) {
+      console.error(e);
+      feedContainer.innerHTML = `<div class="empty">Couldn't load right now — check your connection and tap refresh.</div>`;
+    }
+  }
+
+  document.getElementById('refreshBtn').addEventListener('click', loadFeed);
+
+  loadFeed();
+</script>
+
+</body>
+</html>
