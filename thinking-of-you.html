@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Thinking of You</title>
+
+<!-- Add to Home Screen support (iOS) -->
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Thinking of You">
+<link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='22' fill='%23120a12'/%3E%3Ctext x='50' y='68' font-size='55' text-anchor='middle'%3E%F0%9F%A4%8D%3C/text%3E%3C/svg%3E">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='22' fill='%23120a12'/%3E%3Ctext x='50' y='68' font-size='55' text-anchor='middle'%3E%F0%9F%A4%8D%3C/text%3E%3C/svg%3E">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,500&family=Quicksand:wght@400;500;600&display=swap" rel="stylesheet">
+
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+
+  body {
+    height: 100vh;
+    height: 100dvh;
+    background: radial-gradient(circle at 50% 30%, #2a1420 0%, #170a12 55%, #0d0609 100%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Quicksand', sans-serif;
+    color: #f3d9e0;
+    overflow: hidden;
+    user-select: none;
+  }
+
+  .stars {
+    position: fixed;
+    inset: 0;
+    background-image:
+      radial-gradient(1px 1px at 20% 30%, rgba(255,255,255,0.25), transparent),
+      radial-gradient(1px 1px at 70% 60%, rgba(255,255,255,0.2), transparent),
+      radial-gradient(1px 1px at 40% 80%, rgba(255,255,255,0.15), transparent),
+      radial-gradient(1px 1px at 85% 20%, rgba(255,255,255,0.2), transparent),
+      radial-gradient(1px 1px at 55% 45%, rgba(255,255,255,0.15), transparent);
+    pointer-events: none;
+  }
+
+  h1 {
+    font-family: 'Cormorant Garamond', serif;
+    font-weight: 500;
+    font-size: 1.5rem;
+    letter-spacing: 0.03em;
+    margin-bottom: 0.4rem;
+    text-align: center;
+    padding: 0 2rem;
+    color: #f6e3ea;
+  }
+
+  .sub {
+    font-size: 0.78rem;
+    color: #c99aab;
+    margin-bottom: 3rem;
+    text-align: center;
+    padding: 0 2.5rem;
+    line-height: 1.5;
+  }
+
+  .btn-wrap {
+    position: relative;
+    width: 200px;
+    height: 200px;
+  }
+
+  .pulse {
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    background: rgba(230, 120, 150, 0.35);
+    animation: pulse 2.8s ease-out infinite;
+  }
+
+  @keyframes pulse {
+    0% { transform: scale(0.9); opacity: 0.6; }
+    100% { transform: scale(1.6); opacity: 0; }
+  }
+
+  #heartBtn {
+    position: relative;
+    width: 200px;
+    height: 200px;
+    border-radius: 50%;
+    border: none;
+    background: radial-gradient(circle at 35% 30%, #ff9db3, #e05c82 55%, #a83358 100%);
+    box-shadow: 0 0 40px rgba(224, 92, 130, 0.55), inset 0 -10px 25px rgba(0,0,0,0.25);
+    font-size: 4.2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: transform 0.15s ease;
+  }
+
+  #heartBtn:active {
+    transform: scale(0.9);
+  }
+
+  .status {
+    margin-top: 2.5rem;
+    min-height: 3.5rem;
+    text-align: center;
+    padding: 0 2rem;
+  }
+
+  .status .msg {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 1.1rem;
+    color: #f6e3ea;
+    opacity: 0;
+    transition: opacity 0.4s ease;
+  }
+
+  .status .msg.show { opacity: 1; }
+
+  .count {
+    margin-top: 1.2rem;
+    font-size: 0.7rem;
+    color: #96677a;
+    letter-spacing: 0.05em;
+    text-align: center;
+  }
+
+  .setup {
+    position: fixed;
+    bottom: 1.2rem;
+    font-size: 0.65rem;
+    color: #6b4655;
+    text-align: center;
+    padding: 0 1.5rem;
+  }
+</style>
+</head>
+<body>
+
+<div class="stars"></div>
+
+<h1>For you 🤍</h1>
+<div class="sub">Whenever you think of me,<br>tap the heart — I'll know.</div>
+
+<div class="btn-wrap">
+  <div class="pulse"></div>
+  <button id="heartBtn">🤍</button>
+</div>
+
+<div class="status">
+  <div class="msg" id="msg"></div>
+</div>
+
+<div class="count" id="count"></div>
+
+<div class="setup" id="setupNote"></div>
+
+<script>
+  // ====== CONFIG: Mari fills these in ======
+  const JSONBIN_ID = "6a53edd2da38895dfe53a3fa";
+  const JSONBIN_API_KEY = "$2a$10$U8nlsm..q4/o4sQkHKH7OOYGYmGHfjKVx6Mgasf.fWJO1sZ4Vaym6";
+  // ==========================================
+
+  const messages = [
+    "Sent. She'll see it soon 💌",
+    "Logged with love.",
+    "She'll smile when she sees this.",
+    "Delivered straight to her heart.",
+    "Noted — you thought of her.",
+    "That's another one for the collection."
+  ];
+
+  const btn = document.getElementById('heartBtn');
+  const msgEl = document.getElementById('msg');
+  const countEl = document.getElementById('count');
+  const setupNote = document.getElementById('setupNote');
+
+  const configured = !JSONBIN_ID.startsWith("PASTE") && !JSONBIN_API_KEY.startsWith("PASTE");
+
+  if (!configured) {
+    setupNote.textContent = "Setup needed: add your JSONBin ID + API key in the file to activate sending.";
+  }
+
+  async function logTap() {
+    if (!configured) return { ok: false, localOnly: true };
+    try {
+      // Fetch current data
+      const getRes = await fetch(`https://api.jsonbin.io/v3/b/${JSONBIN_ID}/latest`, {
+        headers: { "X-Master-Key": JSONBIN_API_KEY }
+      });
+      const getData = await getRes.json();
+      const record = getData.record || {};
+      const taps = record.thinkingOfYouTaps || [];
+
+      taps.push({ time: new Date().toISOString() });
+      record.thinkingOfYouTaps = taps;
+
+      await fetch(`https://api.jsonbin.io/v3/b/${JSONBIN_ID}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          "X-Master-Key": JSONBIN_API_KEY
+        },
+        body: JSON.stringify(record)
+      });
+
+      return { ok: true, total: taps.length };
+    } catch (e) {
+      console.error(e);
+      return { ok: false, error: e };
+    }
+  }
+
+  function localCountKey() { return "thinkingOfYou_localCount"; }
+
+  btn.addEventListener('click', async () => {
+    btn.style.transform = "scale(0.88)";
+    setTimeout(() => btn.style.transform = "", 150);
+
+    if (navigator.vibrate) navigator.vibrate(30);
+
+    const randomMsg = messages[Math.floor(Math.random() * messages.length)];
+    msgEl.textContent = randomMsg;
+    msgEl.classList.add('show');
+
+    const result = await logTap();
+
+    let total;
+    if (result.ok) {
+      total = result.total;
+    } else {
+      // fallback to in-memory count for this session if not configured
+      total = (parseInt(sessionStorage.getItem(localCountKey()) || "0") + 1);
+      sessionStorage.setItem(localCountKey(), total);
+    }
+
+    countEl.textContent = `${total} time${total === 1 ? '' : 's'} you've thought of her`;
+
+    setTimeout(() => msgEl.classList.remove('show'), 2800);
+  });
+</script>
+
+</body>
+</html>
