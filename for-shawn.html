@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preconnect" href="https://www.youtube.com">
+<link rel="preconnect" href="https://www.google.com">
+<link rel="dns-prefetch" href="https://www.youtube.com">
+
+<title>For Shawn</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,600;1,9..144,500&family=Space+Grotesk:wght@400;500;600&display=swap');
+
+  :root {
+    --ink: #4A1942;
+    --ink-soft: #631E4F;
+    --amber: #FFB3D1;
+    --amber-soft: #B983FF;
+    --paper: #FFEAF3;
+    --muted: #E3B3CE;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html, body {
+    height: 100%;
+    background: linear-gradient(135deg, #4A1942 0%, #7B2D5E 45%, #C2185B 85%, #EC7FA9 100%);
+    font-family: 'Space Grotesk', sans-serif;
+    overflow: hidden;
+  }
+
+  body {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+  }
+
+  /* subtle grain/vignette */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background: radial-gradient(circle at 50% 30%, rgba(185,131,255,0.18), transparent 60%);
+    pointer-events: none;
+    z-index: 1;
+  }
+
+  /* ---------- gate ---------- */
+  #gate {
+    position: fixed;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 18px;
+    z-index: 10;
+    cursor: pointer;
+    transition: opacity 0.7s ease, visibility 0.7s ease;
+  }
+
+  #gate.hidden { opacity: 0; visibility: hidden; }
+
+  .badge {
+    font-family: 'Fraunces', serif;
+    font-weight: 600;
+    font-size: 15vw;
+    line-height: 1;
+    color: var(--amber);
+    max-font-size: 90px;
+  }
+
+  .gate-label {
+    font-size: 11px;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  .gate-title {
+    font-family: 'Fraunces', serif;
+    font-style: italic;
+    font-size: 20px;
+    color: var(--paper);
+  }
+
+  /* ---------- countdown screen ---------- */
+  #content {
+    position: relative;
+    z-index: 5;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 40px 32px;
+    max-width: 440px;
+    opacity: 0;
+    transition: opacity 0.8s ease 0.2s;
+    cursor: pointer;
+  }
+
+  #content.show { opacity: 1; }
+
+  .number {
+    font-family: 'Fraunces', serif;
+    font-weight: 600;
+    font-size: 96px;
+    line-height: 1;
+    color: var(--amber);
+    transition: opacity 0.25s ease, transform 0.25s ease;
+  }
+
+  .number-label {
+    margin-top: 6px;
+    font-size: 11px;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: var(--muted);
+    transition: opacity 0.25s ease;
+  }
+
+  .reason {
+    margin-top: 30px;
+    font-family: 'Fraunces', serif;
+    font-weight: 500;
+    font-size: 26px;
+    line-height: 1.5;
+    color: var(--paper);
+    min-height: 130px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: opacity 0.25s ease;
+  }
+
+  .progress {
+    display: flex;
+    gap: 6px;
+    margin-top: 34px;
+  }
+
+  .seg {
+    width: 18px;
+    height: 3px;
+    border-radius: 2px;
+    background: rgba(255,234,243,0.15);
+    transition: background 0.3s ease;
+  }
+
+  .seg.done { background: var(--amber); }
+
+  .tap-hint {
+    margin-top: 26px;
+    font-size: 10px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: rgba(255,234,243,0.3);
+  }
+
+  /* ---------- final screen ---------- */
+  #final {
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+  }
+
+  #final.show { display: flex; }
+
+  .final-title {
+    font-family: 'Fraunces', serif;
+    font-style: italic;
+    font-weight: 500;
+    font-size: 34px;
+    color: var(--amber);
+  }
+
+  .final-sub {
+    font-size: 14px;
+    color: var(--muted);
+    max-width: 320px;
+    line-height: 1.6;
+  }
+
+  .note {
+    position: fixed;
+    bottom: 18px;
+    left: 0; right: 0;
+    text-align: center;
+    font-size: 10px;
+    letter-spacing: 1px;
+    color: rgba(255,234,243,0.25);
+    z-index: 5;
+  }
+</style>
+</head>
+<body>
+
+  <div id="gate">
+    <div class="badge">10</div>
+    <div class="gate-title">reasons, counting down</div>
+    <div class="gate-label">tap to start</div>
+  </div>
+
+  <div id="content">
+    <div id="countdown-view">
+      <div class="number" id="number-text">10</div>
+      <div class="number-label" id="number-label">reason ten</div>
+      <div class="reason" id="reason-text"></div>
+      <div class="progress" id="progress"></div>
+      <div class="tap-hint">tap for the next one →</div>
+    </div>
+
+    <div id="final">
+      <div class="final-title">that's ten. there's a hundred more.</div>
+      <div class="final-sub">just wanted you to have this today. love you, Shawn.</div>
+    </div>
+  </div>
+
+  <div class="note" id="music-note">🎵 loading music…</div>
+
+  <div id="yt-player" style="position:fixed; top:-9999px; left:-9999px; width:1px; height:1px;"></div>
+
+  <script src="https://www.youtube.com/iframe_api"></script>
+  <script>
+    // ====== EDIT HERE: your 10 reasons, counted down from #10 to #1 ======
+    const REASONS = [
+      "You make me feel like I'm enough — you've never once made me doubt your love.",
+      "You choose me every day, and I actually feel secure in that.",
+      "You believe in what I'm building, even when it's still just an idea.",
+      "Your discipline pushes me to work harder for my own goals too.",
+      "You never let me feel alone in my ambitions — we're a team in this.",
+      "You make me feel safe enough to not worry about what anyone else thinks.",
+      "You're hardworking and steady, and I notice it more than I say.",
+      "We've been through hard conversations and chose each other instead of giving up.",
+      "You've never made me feel less, even on my most insecure days.",
+      "I don't just love who you are right now — I love the future we're building."
+    ];
+
+    // ====== EDIT HERE: add YouTube video links/IDs for background music ======
+    const SONGS = [
+      '8fO1swbTvQk'
+      // 'ANOTHER_VIDEO_ID',
+    ];
+
+    const gate = document.getElementById('gate');
+    const content = document.getElementById('content');
+    const countdownView = document.getElementById('countdown-view');
+    const finalView = document.getElementById('final');
+    const numberText = document.getElementById('number-text');
+    const numberLabel = document.getElementById('number-label');
+    const reasonText = document.getElementById('reason-text');
+    const progress = document.getElementById('progress');
+
+    let player;
+    let playerReady = false;
+    let wantsToPlay = false;
+    let idx = 0; // 0 -> "10", last -> "1"
+
+    const words = ['ten','nine','eight','seven','six','five','four','three','two','one'];
+
+    REASONS.forEach(() => {
+      const s = document.createElement('div');
+      s.className = 'seg';
+      progress.appendChild(s);
+    });
+
+    function renderSlide(i) {
+      numberText.style.opacity = 0;
+      reasonText.style.opacity = 0;
+      setTimeout(() => {
+        numberText.textContent = REASONS.length - i;
+        numberLabel.textContent = 'reason ' + words[i];
+        reasonText.textContent = REASONS[i];
+        numberText.style.opacity = 1;
+        reasonText.style.opacity = 1;
+        [...progress.children].forEach((s, si) => s.classList.toggle('done', si <= i));
+      }, 200);
+    }
+    renderSlide(0);
+
+    content.addEventListener('click', () => {
+      if (finalView.classList.contains('show')) return;
+      idx++;
+      if (idx >= REASONS.length) {
+        countdownView.style.display = 'none';
+        finalView.classList.add('show');
+      } else {
+        renderSlide(idx);
+      }
+    });
+
+    function onYouTubeIframeAPIReady() {
+      player = new YT.Player('yt-player', {
+        height: '1',
+        width: '1',
+        videoId: SONGS[0],
+        playerVars: {
+          autoplay: 0,
+          controls: 0,
+          loop: 1,
+          playlist: SONGS.length > 1 ? SONGS.slice(1).join(',') : SONGS[0],
+          playsinline: 1
+        },
+        events: {
+          onReady: () => {
+            playerReady = true;
+            const noteEl = document.getElementById('music-note');
+            if (noteEl) noteEl.textContent = '🎵 turn your volume up';
+            if (wantsToPlay) {
+              player.unMute();
+              player.setVolume(100);
+              player.playVideo();
+            }
+          }
+        }
+      });
+    }
+
+    gate.addEventListener('click', () => {
+      wantsToPlay = true;
+      if (playerReady) {
+        player.unMute();
+        player.setVolume(100);
+        player.playVideo();
+      }
+      gate.classList.add('hidden');
+      content.classList.add('show');
+    }, { once: true });
+  </script>
+
+</body>
+</html>
