@@ -1,0 +1,1015 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Our Love Universe — Mari & Alex</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400;1,600&family=Jost:wght@300;400;500;600&family=Caveat:wght@400;600&display=swap');
+
+:root {
+  --bg: #080508; --dark: #100810; --card: #180d18;
+  --border: rgba(180,30,120,0.2); --red: #c0182a; --rose: #8b2035;
+  --purple: #6b21a8; --pink: #be185d; --gold: #d4a017;
+  --red-glow: rgba(192,24,42,0.3); --gold-dim: rgba(212,160,23,0.12);
+  --red-dim: rgba(192,24,42,0.12); --purple-dim: rgba(107,33,168,0.15);
+  --white: #f5e8f0; --muted: #7a4d6a; --cream: #fdf0f5;
+}
+
+* { box-sizing:border-box; margin:0; padding:0; }
+body { background:var(--bg); color:var(--white); font-family:'Jost',sans-serif; min-height:100vh; overflow-x:hidden; }
+
+body::before { content:''; position:fixed; inset:0; background: radial-gradient(ellipse 60% 50% at 15% 10%, rgba(192,24,42,0.12) 0%, transparent 65%), radial-gradient(ellipse 50% 40% at 85% 85%, rgba(107,33,168,0.1) 0%, transparent 65%), radial-gradient(ellipse 40% 30% at 50% 50%, rgba(212,160,23,0.04) 0%, transparent 70%); pointer-events:none; z-index:0; }
+
+/* PARTICLES */
+.particles { position:fixed; inset:0; pointer-events:none; z-index:0; overflow:hidden; }
+.particle { position:absolute; bottom:-10px; opacity:0; animation:rise linear infinite; font-size:0.9rem; }
+@keyframes rise { 0%{transform:translateY(0) rotate(-15deg) scale(0.7);opacity:0} 8%{opacity:0.4} 92%{opacity:0.08} 100%{transform:translateY(-105vh) rotate(15deg) scale(1.2);opacity:0} }
+@keyframes pulse { 0%,100%{transform:scale(1)} 50%{transform:scale(1.1)} }
+@keyframes shimmer { 0%,100%{opacity:0.6} 50%{opacity:1} }
+@keyframes fadeIn { from{opacity:0;transform:translateY(16px)} to{opacity:1;transform:translateY(0)} }
+@keyframes popIn { 0%{transform:scale(0.8);opacity:0} 100%{transform:scale(1);opacity:1} }
+
+/* LOCK */
+#view-lock { display:flex; flex-direction:column; align-items:center; justify-content:center; min-height:100vh; padding:40px 24px; text-align:center; position:relative; z-index:1; }
+.lock-icon { font-size:4rem; margin-bottom:14px; animation:pulse 2.5s ease-in-out infinite; }
+.lock-title { font-family:'Playfair Display',serif; font-size:2.6rem; color:var(--gold); font-style:italic; margin-bottom:4px; }
+.lock-tagline { font-size:0.85rem; color:var(--pink); font-family:'Playfair Display',serif; font-style:italic; margin-bottom:6px; }
+.lock-sub { font-size:0.72rem; color:var(--muted); margin-bottom:14px; letter-spacing:0.1em; }
+.lock-emojis { font-size:1.5rem; margin-bottom:26px; letter-spacing:0.15em; }
+.lock-input { background:var(--card); border:1.5px solid var(--border); border-radius:14px; padding:14px 20px; color:var(--white); font-family:'Jost',sans-serif; font-size:1rem; text-align:center; width:100%; max-width:290px; outline:none; margin-bottom:12px; display:block; transition:border-color 0.2s, box-shadow 0.2s; }
+.lock-input:focus { border-color:var(--red); box-shadow:0 0 20px var(--red-glow); }
+.lock-btn { background:linear-gradient(135deg,var(--red),var(--purple)); color:white; border:none; border-radius:14px; padding:15px 40px; font-family:'Jost',sans-serif; font-size:0.92rem; font-weight:600; cursor:pointer; box-shadow:0 0 32px var(--red-glow); display:block; width:100%; max-width:290px; transition:transform 0.15s, box-shadow 0.2s; letter-spacing:0.04em; }
+.lock-btn:hover { transform:translateY(-2px); box-shadow:0 0 44px var(--red-glow); }
+.lock-err { font-size:0.75rem; color:var(--red); margin-top:10px; display:none; font-style:italic; }
+.lock-status { font-size:0.72rem; color:var(--muted); margin-top:10px; display:none; font-style:italic; }
+
+/* NAV */
+nav { position:sticky; top:0; background:rgba(8,5,8,0.97); backdrop-filter:blur(14px); border-bottom:1px solid var(--border); z-index:100; }
+.nav-top { display:flex; align-items:center; justify-content:space-between; padding:12px 18px 8px; }
+.nav-logo { font-family:'Playfair Display',serif; font-size:1rem; color:var(--gold); font-style:italic; }
+.nav-logo small { display:block; font-style:normal; font-size:0.58rem; letter-spacing:0.14em; text-transform:uppercase; color:var(--muted); }
+.mood-indicator { font-size:0.7rem; color:var(--muted); display:flex; align-items:center; gap:6px; cursor:pointer; }
+.mood-dot { width:8px; height:8px; border-radius:50%; background:var(--red); animation:shimmer 2s ease-in-out infinite; }
+.nav-tabs { display:flex; gap:1px; overflow-x:auto; scrollbar-width:none; padding:0 14px 12px; }
+.nav-tabs::-webkit-scrollbar { display:none; }
+.nav-tab { color:var(--muted); font-size:0.67rem; font-weight:500; padding:5px 10px; border-radius:20px; cursor:pointer; white-space:nowrap; border:none; background:none; font-family:'Jost',sans-serif; transition:all 0.2s; }
+.nav-tab:hover { color:var(--white); }
+.nav-tab.active { color:var(--gold); background:var(--gold-dim); border:1px solid rgba(212,160,23,0.2); }
+
+/* VIEWS */
+.view { display:none; position:relative; z-index:1; animation:fadeIn 0.3s ease; }
+.view.active { display:block; }
+
+/* HERO */
+.hero { padding:40px 22px 24px; text-align:center; max-width:580px; margin:0 auto; }
+.hero-title { font-family:'Playfair Display',serif; font-size:2rem; line-height:1.15; margin-bottom:8px; }
+.hero-title em { color:var(--gold); font-style:italic; }
+.hero-sub { font-size:0.78rem; color:var(--muted); line-height:1.75; font-style:italic; font-family:'Playfair Display',serif; }
+
+/* SECTION */
+.section { padding:0 16px 60px; max-width:580px; margin:0 auto; }
+.section-head { display:flex; align-items:center; gap:8px; margin-bottom:16px; padding-bottom:10px; border-bottom:1px solid var(--border); }
+.section-title { font-family:'Playfair Display',serif; font-size:1.1rem; color:var(--gold); font-style:italic; }
+
+/* CARDS */
+.card { background:var(--card); border:1px solid var(--border); border-radius:14px; padding:16px; margin-bottom:10px; }
+.card-glow { border-color:rgba(212,160,23,0.25); background:linear-gradient(135deg,var(--card),rgba(212,160,23,0.05)); }
+.card-purple { border-color:rgba(107,33,168,0.3); background:linear-gradient(135deg,var(--card),rgba(107,33,168,0.05)); }
+.card-pink { border-color:rgba(190,24,93,0.25); background:linear-gradient(135deg,var(--card),rgba(190,24,93,0.05)); }
+
+/* HOME GRID */
+.home-grid { display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:16px; }
+.home-tile { background:var(--card); border:1px solid var(--border); border-radius:14px; padding:18px 12px; text-align:center; cursor:pointer; transition:all 0.2s; }
+.home-tile:hover { transform:translateY(-3px); border-color:rgba(212,160,23,0.3); box-shadow:0 8px 24px rgba(0,0,0,0.3); }
+.home-tile-emoji { font-size:2rem; margin-bottom:6px; }
+.home-tile-label { font-family:'Playfair Display',serif; font-size:0.85rem; color:var(--gold); font-style:italic; }
+.home-tile-count { font-size:0.62rem; color:var(--muted); margin-top:3px; }
+
+/* MOOD THEMES */
+body.mood-romantic { --bg:#0d0508; }
+body.mood-happy { --bg:#090a05; }
+body.mood-cozy { --bg:#0a0805; }
+body.mood-sad { --bg:#05080d; }
+
+/* DAILY QUESTION */
+.dq-card { background:linear-gradient(135deg,rgba(107,33,168,0.15),rgba(192,24,42,0.1)); border:1px solid rgba(107,33,168,0.3); border-radius:16px; padding:20px; margin-bottom:16px; }
+.dq-label { font-size:0.62rem; color:var(--purple); letter-spacing:0.14em; text-transform:uppercase; margin-bottom:8px; }
+.dq-question { font-family:'Playfair Display',serif; font-size:1.1rem; color:var(--white); line-height:1.5; margin-bottom:14px; font-style:italic; }
+.dq-answers { display:flex; flex-direction:column; gap:8px; }
+.dq-answer { background:rgba(255,255,255,0.04); border:1px solid var(--border); border-radius:10px; padding:12px 14px; }
+.dq-answer-who { font-size:0.6rem; color:var(--gold); letter-spacing:0.1em; text-transform:uppercase; margin-bottom:4px; }
+.dq-answer-text { font-size:0.85rem; color:var(--white); line-height:1.6; font-style:italic; }
+
+/* POLAROIDS */
+.polaroids { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+.polaroid { background:var(--cream); border-radius:4px; padding:10px 10px 28px; box-shadow:0 4px 20px rgba(0,0,0,0.5); transform:rotate(var(--rot,0deg)); transition:transform 0.2s; cursor:pointer; }
+.polaroid:hover { transform:rotate(0deg) scale(1.04); }
+.polaroid-img { width:100%; aspect-ratio:1; background:var(--red-dim); display:flex; align-items:center; justify-content:center; font-size:2.8rem; border-radius:2px; margin-bottom:10px; }
+.polaroid-caption { font-family:'Caveat',cursive; font-size:0.85rem; color:#333; text-align:center; line-height:1.3; }
+.polaroid-date { font-family:'Caveat',cursive; font-size:0.7rem; color:#888; text-align:center; margin-top:3px; }
+
+/* MAP */
+.map-wrap { background:var(--card); border:1px solid var(--border); border-radius:14px; padding:16px; margin-bottom:12px; }
+.map-visual { width:100%; height:180px; background:linear-gradient(135deg,rgba(107,33,168,0.1),rgba(192,24,42,0.08)); border-radius:10px; display:flex; align-items:center; justify-content:center; font-size:0.82rem; color:var(--muted); font-style:italic; margin-bottom:12px; position:relative; overflow:hidden; border:1px solid var(--border); }
+.map-pin { position:absolute; font-size:1.4rem; cursor:pointer; transform:translate(-50%,-100%); transition:transform 0.2s; }
+.map-pin:hover { transform:translate(-50%,-100%) scale(1.3); }
+.map-pin-label { position:absolute; background:var(--dark); border:1px solid var(--border); border-radius:6px; padding:4px 8px; font-size:0.62rem; color:var(--white); white-space:nowrap; bottom:calc(100% + 4px); left:50%; transform:translateX(-50%); display:none; }
+.map-pin:hover .map-pin-label { display:block; }
+.pin-list-item { display:flex; align-items:center; gap:10px; padding:10px 0; border-bottom:1px solid var(--border); }
+.pin-list-item:last-child { border-bottom:none; }
+.pin-emoji { font-size:1.2rem; }
+.pin-info { flex:1; }
+.pin-name { font-size:0.84rem; color:var(--white); font-weight:500; }
+.pin-desc { font-size:0.68rem; color:var(--muted); font-style:italic; }
+
+/* NOW PLAYING */
+.playing-card { background:linear-gradient(135deg,rgba(192,24,42,0.12),rgba(107,33,168,0.1)); border:1px solid rgba(192,24,42,0.25); border-radius:14px; padding:16px; margin-bottom:10px; display:flex; align-items:center; gap:14px; }
+.playing-disc { width:48px; height:48px; border-radius:50%; background:var(--red-dim); display:flex; align-items:center; justify-content:center; font-size:1.4rem; flex-shrink:0; border:2px solid rgba(192,24,42,0.3); animation:spin 4s linear infinite paused; }
+.playing-disc.playing { animation-play-state:running; }
+@keyframes spin { from{transform:rotate(0deg)} to{transform:rotate(360deg)} }
+.playing-info { flex:1; }
+.playing-who { font-size:0.6rem; color:var(--pink); letter-spacing:0.1em; text-transform:uppercase; margin-bottom:3px; }
+.playing-song { font-size:0.9rem; font-weight:600; color:var(--white); margin-bottom:2px; }
+.playing-note { font-size:0.7rem; color:var(--muted); font-style:italic; }
+
+/* GOOD MORNING / NIGHT */
+.message-card { border-radius:14px; padding:18px; margin-bottom:10px; position:relative; overflow:hidden; }
+.message-card.morning { background:linear-gradient(135deg,rgba(212,160,23,0.12),rgba(192,24,42,0.08)); border:1px solid rgba(212,160,23,0.25); }
+.message-card.night { background:linear-gradient(135deg,rgba(107,33,168,0.12),rgba(8,5,8,0.5)); border:1px solid rgba(107,33,168,0.25); }
+.message-type { font-size:0.62rem; letter-spacing:0.14em; text-transform:uppercase; margin-bottom:6px; }
+.message-type.morning { color:var(--gold); }
+.message-type.night { color:#a78bfa; }
+.message-text { font-family:'Playfair Display',serif; font-size:0.95rem; color:var(--white); line-height:1.7; font-style:italic; margin-bottom:8px; }
+.message-meta { font-size:0.62rem; color:var(--muted); }
+.message-bg { position:absolute; right:16px; top:50%; transform:translateY(-50%); font-size:3rem; opacity:0.06; pointer-events:none; }
+
+/* STAR JAR */
+.jar-wrap { text-align:center; padding:20px; }
+.jar-visual { font-size:0.9rem; line-height:1.6; letter-spacing:0.05em; word-break:break-all; min-height:60px; margin:14px 0; padding:14px; background:rgba(212,160,23,0.06); border:1px solid rgba(212,160,23,0.15); border-radius:12px; }
+.jar-count { font-family:'Playfair Display',serif; font-size:2rem; color:var(--gold); margin-bottom:4px; }
+.jar-label { font-size:0.65rem; color:var(--muted); text-transform:uppercase; letter-spacing:0.12em; margin-bottom:16px; }
+.jar-stars-wrap { max-height:120px; overflow-y:auto; }
+.star-item { display:flex; align-items:center; gap:10px; padding:8px 0; border-bottom:1px solid var(--border); font-size:0.8rem; }
+.star-item:last-child { border-bottom:none; }
+.star-item-emoji { font-size:1.1rem; }
+.star-item-text { flex:1; color:var(--white); }
+.star-item-who { font-size:0.6rem; color:var(--gold); }
+.star-item-date { font-size:0.6rem; color:var(--muted); }
+
+/* GOALS */
+.goal-item { display:flex; align-items:center; gap:12px; padding:12px 0; border-bottom:1px solid var(--border); cursor:pointer; }
+.goal-item:last-child { border-bottom:none; }
+.goal-check { width:22px; height:22px; border-radius:50%; border:1.5px solid var(--muted); flex-shrink:0; display:flex; align-items:center; justify-content:center; font-size:0.7rem; transition:all 0.2s; }
+.goal-item.done .goal-check { background:var(--gold); border-color:var(--gold); color:var(--bg); }
+.goal-item.done .goal-text { text-decoration:line-through; color:var(--muted); }
+.goal-text { flex:1; font-size:0.84rem; color:var(--white); }
+.goal-period { font-size:0.6rem; color:var(--purple); background:var(--purple-dim); padding:2px 7px; border-radius:10px; white-space:nowrap; }
+
+/* FORMS */
+.form-group { margin-bottom:12px; }
+.form-label { font-size:0.65rem; color:var(--gold); letter-spacing:0.08em; text-transform:uppercase; margin-bottom:5px; display:block; }
+.form-input, .form-textarea, .form-select { width:100%; background:rgba(255,255,255,0.04); border:1px solid var(--border); border-radius:9px; padding:11px 13px; color:var(--white); font-family:'Jost',sans-serif; font-size:0.85rem; outline:none; transition:border-color 0.2s; }
+.form-input:focus,.form-textarea:focus,.form-select:focus { border-color:var(--red); }
+.form-input::placeholder,.form-textarea::placeholder { color:var(--muted); font-style:italic; }
+.form-textarea { resize:none; min-height:80px; line-height:1.6; }
+.form-select option { background:var(--dark); }
+.who-row { display:flex; gap:8px; margin-bottom:12px; }
+.who-btn { flex:1; padding:11px; border-radius:9px; border:1.5px solid var(--border); background:var(--card); color:var(--muted); font-family:'Jost',sans-serif; font-size:0.8rem; cursor:pointer; text-align:center; transition:all 0.2s; }
+.who-btn.sel-mari { border-color:var(--red); color:var(--white); background:var(--red-dim); }
+.who-btn.sel-alex { border-color:var(--gold); color:var(--white); background:var(--gold-dim); }
+
+.btn-primary { background:linear-gradient(135deg,var(--red),var(--purple)); color:white; border:none; border-radius:10px; padding:13px 22px; font-family:'Jost',sans-serif; font-size:0.84rem; font-weight:600; cursor:pointer; box-shadow:0 0 20px var(--red-glow); width:100%; transition:transform 0.15s; letter-spacing:0.04em; }
+.btn-primary:hover { transform:translateY(-1px); }
+.btn-primary:disabled { opacity:0.6; cursor:not-allowed; transform:none; }
+.btn-sm { background:var(--card); border:1px solid var(--border); color:var(--muted); border-radius:8px; padding:8px 16px; font-size:0.75rem; cursor:pointer; font-family:'Jost',sans-serif; transition:all 0.2s; }
+.btn-sm:hover { border-color:var(--red); color:var(--white); }
+
+/* MOOD PICKER */
+.mood-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:8px; margin-bottom:14px; }
+.mood-option { background:var(--card); border:1.5px solid var(--border); border-radius:12px; padding:12px 8px; text-align:center; cursor:pointer; transition:all 0.2s; }
+.mood-option:hover { transform:scale(1.05); }
+.mood-option.selected { border-color:var(--gold); background:var(--gold-dim); }
+.mood-option-emoji { font-size:1.6rem; margin-bottom:4px; }
+.mood-option-label { font-size:0.65rem; color:var(--muted); }
+
+/* MISC */
+.empty { text-align:center; padding:36px 20px; color:var(--muted); font-size:0.8rem; font-style:italic; font-family:'Playfair Display',serif; line-height:1.7; }
+.loading { text-align:center; padding:28px; color:var(--muted); font-size:0.78rem; font-style:italic; }
+.divider { text-align:center; color:var(--pink); font-size:0.6rem; letter-spacing:0.3em; opacity:0.4; margin:4px 0 16px; }
+.quote { font-family:'Playfair Display',serif; font-style:italic; color:var(--muted); font-size:0.78rem; text-align:center; margin-bottom:18px; }
+.tag { font-size:0.6rem; padding:3px 8px; border-radius:10px; display:inline-block; }
+.tag-monthly { background:rgba(192,24,42,0.15); color:var(--red); }
+.tag-yearly { background:rgba(107,33,168,0.15); color:#a78bfa; }
+.tag-bucket { background:var(--gold-dim); color:var(--gold); }
+
+.toast { position:fixed; bottom:24px; left:50%; transform:translateX(-50%) translateY(80px); background:var(--red); color:white; border-radius:50px; padding:10px 22px; font-size:0.78rem; font-family:'Jost',sans-serif; font-weight:500; box-shadow:0 4px 24px var(--red-glow); transition:transform 0.35s cubic-bezier(.34,1.56,.64,1); z-index:999; pointer-events:none; white-space:nowrap; }
+.toast.show { transform:translateX(-50%) translateY(0); }
+.toast.gold { background:var(--gold); color:var(--bg); }
+
+/* MODAL */
+.modal-overlay { position:fixed; inset:0; background:rgba(0,0,0,0.85); z-index:500; display:none; align-items:flex-end; justify-content:center; }
+.modal-overlay.open { display:flex; }
+.modal { background:var(--dark); border:1px solid var(--border); border-top:2px solid var(--red); border-radius:20px 20px 0 0; padding:22px 18px 44px; width:100%; max-width:580px; max-height:88vh; overflow-y:auto; animation:popIn 0.25s ease; }
+.modal-title { font-family:'Playfair Display',serif; font-size:1.1rem; color:var(--gold); margin-bottom:18px; font-style:italic; display:flex; justify-content:space-between; align-items:center; }
+.modal-close { background:none; border:none; color:var(--muted); font-size:1.2rem; cursor:pointer; }
+</style>
+</head>
+<body>
+
+<div class="particles" id="particles"></div>
+
+<!-- LOCK -->
+<div id="view-lock" class="view active">
+  <div class="lock-icon">🌌</div>
+  <div class="lock-title">Our Love Universe</div>
+  <div class="lock-tagline">a galaxy built for two ✨</div>
+  <div class="lock-sub">Mari & Alex · Infinite & Private</div>
+  <div class="lock-emojis">🌹 💋 ⭐ 🔥</div>
+  <input class="lock-input" id="lock-input" type="text" placeholder="marilex" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
+  <button class="lock-btn" onclick="tryUnlock()">Enter Our Universe 🌌</button>
+  <div class="lock-err" id="lock-err">That's not it, my love 💔</div>
+  <div class="lock-status" id="lock-status">Loading our universe… ✨</div>
+</div>
+
+<!-- NAV -->
+<nav id="main-nav" style="display:none;">
+  <div class="nav-top">
+    <div class="nav-logo">Our Love Universe <small>Mari & Alex ❤️</small></div>
+    <div class="mood-indicator" onclick="showView('mood')">
+      <div class="mood-dot" id="mood-dot"></div>
+      <span id="mood-label">Set mood</span>
+    </div>
+  </div>
+  <div class="nav-tabs">
+    <button class="nav-tab active" onclick="showView('home')">🏠 Home</button>
+    <button class="nav-tab" onclick="showView('question')">💬 Question</button>
+    <button class="nav-tab" onclick="showView('memories')">📸 Memories</button>
+    <button class="nav-tab" onclick="showView('map')">🗺️ Map</button>
+    <button class="nav-tab" onclick="showView('music')">🎵 Music</button>
+    <button class="nav-tab" onclick="showView('messages')">🌙 Messages</button>
+    <button class="nav-tab" onclick="showView('jar')">⭐ Star Jar</button>
+    <button class="nav-tab" onclick="showView('goals')">🎯 Goals</button>
+    <button class="nav-tab" onclick="showView('mood')">🎭 Mood</button>
+  </div>
+</nav>
+
+<!-- HOME -->
+<div class="view" id="view-home">
+  <div class="hero">
+    <div class="hero-title">Welcome to<br><em>our universe</em> 🌌</div>
+    <div class="hero-sub">A galaxy of memories, music, messages, and love — built only for Mari & Alex.</div>
+  </div>
+  <div class="divider">· · ❤️ · · ⭐ · · 🌹 · ·</div>
+  <div class="quote" id="home-quote">"You are my favourite place in the world"</div>
+  <div class="section">
+    <!-- Daily question preview -->
+    <div class="dq-card" style="margin-bottom:16px;cursor:pointer;" onclick="showView('question')">
+      <div class="dq-label">💬 Today's Question</div>
+      <div class="dq-question" id="home-dq" style="font-size:0.92rem;margin-bottom:0;">Loading…</div>
+    </div>
+    <!-- Latest message -->
+    <div class="card card-purple" id="home-msg" style="display:none;margin-bottom:16px;cursor:pointer;" onclick="showView('messages')">
+      <div style="font-size:0.6rem;color:#a78bfa;letter-spacing:0.12em;text-transform:uppercase;margin-bottom:6px;" id="home-msg-type">🌙 Latest Message</div>
+      <div style="font-family:'Playfair Display',serif;font-size:0.88rem;color:var(--white);font-style:italic;line-height:1.65;" id="home-msg-text">—</div>
+      <div style="font-size:0.6rem;color:var(--muted);margin-top:6px;" id="home-msg-meta">—</div>
+    </div>
+    <!-- Grid -->
+    <div class="home-grid">
+      <div class="home-tile" onclick="showView('memories')"><div class="home-tile-emoji">📸</div><div class="home-tile-label">Memories</div><div class="home-tile-count" id="ht-mem">— photos</div></div>
+      <div class="home-tile" onclick="showView('jar')"><div class="home-tile-emoji">⭐</div><div class="home-tile-label">Star Jar</div><div class="home-tile-count" id="ht-stars">— stars</div></div>
+      <div class="home-tile" onclick="showView('goals')"><div class="home-tile-emoji">🎯</div><div class="home-tile-label">Goals</div><div class="home-tile-count" id="ht-goals">— goals</div></div>
+      <div class="home-tile" onclick="showView('map')"><div class="home-tile-emoji">🗺️</div><div class="home-tile-label">Our Map</div><div class="home-tile-count" id="ht-pins">— pins</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- DAILY QUESTION -->
+<div class="view" id="view-question">
+  <div class="hero" style="padding-bottom:16px;">
+    <div class="hero-title" style="font-size:1.8rem;"><em>Today's</em> Question 💬</div>
+    <div class="hero-sub">A new question every day — answer honestly, grow together</div>
+  </div>
+  <div class="section" style="padding-top:10px;">
+    <div class="dq-card" style="margin-bottom:20px;">
+      <div class="dq-label">💬 Question of the Day</div>
+      <div class="dq-question" id="dq-main">Loading today's question…</div>
+      <div class="dq-answers" id="dq-answers"></div>
+    </div>
+    <div class="card card-glow">
+      <div style="font-family:'Playfair Display',serif;font-size:0.95rem;color:var(--gold);margin-bottom:14px;font-style:italic;">Answer today's question 💬</div>
+      <div class="form-group">
+        <label class="form-label">Who is answering?</label>
+        <div class="who-row">
+          <button class="who-btn" id="dq-mari" onclick="selWho('dq','Mari')">🌸 Mari</button>
+          <button class="who-btn" id="dq-alex" onclick="selWho('dq','Alex')">❤️ Alex</button>
+        </div>
+      </div>
+      <div class="form-group"><textarea class="form-textarea" id="dq-answer" placeholder="Be honest… this is a safe space 🌹" style="min-height:100px;"></textarea></div>
+      <button class="btn-primary" id="dq-save-btn" onclick="saveDQAnswer()">Share My Answer 💬</button>
+    </div>
+    <div style="margin-top:20px;">
+      <div style="font-size:0.65rem;color:var(--muted);text-transform:uppercase;letter-spacing:0.12em;margin-bottom:12px;">Past Questions</div>
+      <div id="past-questions"><div class="loading">Loading…</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- MEMORIES (POLAROIDS) -->
+<div class="view" id="view-memories">
+  <div class="hero" style="padding-bottom:16px;">
+    <div class="hero-title" style="font-size:1.8rem;">Our <em>Memories</em> 📸</div>
+    <div class="hero-sub">Every moment, captured like a polaroid</div>
+  </div>
+  <div class="section" style="padding-top:10px;">
+    <button class="btn-primary" style="margin-bottom:18px;" onclick="openModal('modal-memory')">+ Add a Memory</button>
+    <div class="polaroids" id="polaroids-grid"><div class="loading" style="grid-column:span 2;">Loading memories… 📸</div></div>
+  </div>
+</div>
+
+<!-- MAP -->
+<div class="view" id="view-map">
+  <div class="hero" style="padding-bottom:16px;">
+    <div class="hero-title" style="font-size:1.8rem;">Our <em>Love Map</em> 🗺️</div>
+    <div class="hero-sub">Every place that means something to us</div>
+  </div>
+  <div class="section" style="padding-top:10px;">
+    <div class="map-wrap">
+      <div class="map-visual" id="map-visual">
+        <span style="position:relative;z-index:1;">🗺️ Our special places</span>
+      </div>
+      <div id="pin-list"><div class="loading">Loading pins… 🗺️</div></div>
+    </div>
+    <button class="btn-primary" onclick="openModal('modal-pin')">+ Pin a Place</button>
+  </div>
+</div>
+
+<!-- MUSIC -->
+<div class="view" id="view-music">
+  <div class="hero" style="padding-bottom:16px;">
+    <div class="hero-title" style="font-size:1.8rem;"><em>Now Playing</em> 🎵</div>
+    <div class="hero-sub">What's in each other's ears right now</div>
+  </div>
+  <div class="section" style="padding-top:10px;">
+    <div class="card card-pink" style="margin-bottom:18px;">
+      <div style="font-family:'Playfair Display',serif;font-size:0.95rem;color:var(--pink);margin-bottom:14px;font-style:italic;">Share what you're listening to 🎵</div>
+      <div class="form-group"><label class="form-label">Who is sharing?</label>
+        <div class="who-row">
+          <button class="who-btn" id="music-mari" onclick="selWho('music','Mari')">🌸 Mari</button>
+          <button class="who-btn" id="music-alex" onclick="selWho('music','Alex')">❤️ Alex</button>
+        </div>
+      </div>
+      <div class="form-group"><label class="form-label">Song & Artist</label><input class="form-input" id="music-song" placeholder="e.g. Die For You — The Weeknd"></div>
+      <div class="form-group"><label class="form-label">Why this song right now?</label><textarea class="form-textarea" id="music-note" placeholder="What does it make you feel? Does it remind you of us? 🎵" style="min-height:60px;"></textarea></div>
+      <button class="btn-primary" id="music-save-btn" onclick="saveMusic()">Share This Song 🎵</button>
+    </div>
+    <div id="music-list"><div class="loading">Loading songs… 🎵</div></div>
+  </div>
+</div>
+
+<!-- MESSAGES -->
+<div class="view" id="view-messages">
+  <div class="hero" style="padding-bottom:16px;">
+    <div class="hero-title" style="font-size:1.8rem;"><em>Good Night</em> & Good Morning 🌙</div>
+    <div class="hero-sub">Leave a message before you sleep or when you wake</div>
+  </div>
+  <div class="section" style="padding-top:10px;">
+    <div class="card card-purple" style="margin-bottom:18px;">
+      <div style="font-family:'Playfair Display',serif;font-size:0.95rem;color:#a78bfa;margin-bottom:14px;font-style:italic;">Leave a message 🌙</div>
+      <div class="form-group"><label class="form-label">From</label>
+        <div class="who-row">
+          <button class="who-btn" id="msg-mari" onclick="selWho('msg','Mari')">🌸 Mari</button>
+          <button class="who-btn" id="msg-alex" onclick="selWho('msg','Alex')">❤️ Alex</button>
+        </div>
+      </div>
+      <div class="form-group"><label class="form-label">Type</label>
+        <select class="form-select" id="msg-type">
+          <option value="night">🌙 Good Night</option>
+          <option value="morning">☀️ Good Morning</option>
+          <option value="thinking">💭 Thinking of You</option>
+          <option value="love">❤️ Just Because</option>
+        </select>
+      </div>
+      <div class="form-group"><textarea class="form-textarea" id="msg-text" placeholder="Sweet dreams, my love… 🌙" style="min-height:90px;"></textarea></div>
+      <button class="btn-primary" id="msg-save-btn" onclick="saveMessage()">Send This Message 🌙</button>
+    </div>
+    <div id="messages-list"><div class="loading">Loading messages… 🌙</div></div>
+  </div>
+</div>
+
+<!-- STAR JAR -->
+<div class="view" id="view-jar">
+  <div class="hero" style="padding-bottom:16px;">
+    <div class="hero-title" style="font-size:1.8rem;">Our <em>Star Jar</em> ⭐</div>
+    <div class="hero-sub">Every good moment goes in here. Watch it fill up 🌟</div>
+  </div>
+  <div class="section" style="padding-top:10px;">
+    <div class="card card-glow" style="text-align:center;margin-bottom:18px;">
+      <div class="jar-count" id="jar-count">0</div>
+      <div class="jar-label">Stars in our jar</div>
+      <div class="jar-visual" id="jar-visual">Empty for now… add your first star ⭐</div>
+    </div>
+    <div class="card" style="margin-bottom:18px;">
+      <div style="font-family:'Playfair Display',serif;font-size:0.95rem;color:var(--gold);margin-bottom:14px;font-style:italic;">Add a star ⭐</div>
+      <div class="form-group"><label class="form-label">Who is adding?</label>
+        <div class="who-row">
+          <button class="who-btn" id="jar-mari" onclick="selWho('jar','Mari')">🌸 Mari</button>
+          <button class="who-btn" id="jar-alex" onclick="selWho('jar','Alex')">❤️ Alex</button>
+        </div>
+      </div>
+      <div class="form-group"><input class="form-input" id="jar-text" placeholder="What good thing happened? 🌟"></div>
+      <button class="btn-primary" id="jar-save-btn" onclick="saveStar()">Add to Our Jar ⭐</button>
+    </div>
+    <div id="star-list"><div class="loading">Loading stars… ⭐</div></div>
+  </div>
+</div>
+
+<!-- GOALS -->
+<div class="view" id="view-goals">
+  <div class="hero" style="padding-bottom:16px;">
+    <div class="hero-title" style="font-size:1.8rem;">Our <em>Goals</em> 🎯</div>
+    <div class="hero-sub">What we want to achieve — together and individually</div>
+  </div>
+  <div class="section" style="padding-top:10px;">
+    <button class="btn-primary" style="margin-bottom:18px;" onclick="openModal('modal-goal')">+ Add a Goal</button>
+    <div id="goals-list"><div class="loading">Loading goals… 🎯</div></div>
+  </div>
+</div>
+
+<!-- MOOD -->
+<div class="view" id="view-mood">
+  <div class="hero" style="padding-bottom:16px;">
+    <div class="hero-title" style="font-size:1.8rem;"><em>Our Mood</em> 🎭</div>
+    <div class="hero-sub">Set the vibe — the whole universe responds</div>
+  </div>
+  <div class="section" style="padding-top:10px;">
+    <div class="card card-glow" style="margin-bottom:18px;">
+      <div style="font-family:'Playfair Display',serif;font-size:0.95rem;color:var(--gold);margin-bottom:14px;font-style:italic;">How are we feeling? 🎭</div>
+      <div class="form-group"><label class="form-label">Who is setting the mood?</label>
+        <div class="who-row">
+          <button class="who-btn" id="mood-mari" onclick="selWho('mood','Mari')">🌸 Mari</button>
+          <button class="who-btn" id="mood-alex" onclick="selWho('mood','Alex')">❤️ Alex</button>
+        </div>
+      </div>
+      <div class="mood-grid">
+        <div class="mood-option" onclick="selMood(this,'romantic','🥰','Romantic')"><div class="mood-option-emoji">🥰</div><div class="mood-option-label">Romantic</div></div>
+        <div class="mood-option" onclick="selMood(this,'happy','😊','Happy')"><div class="mood-option-emoji">😊</div><div class="mood-option-label">Happy</div></div>
+        <div class="mood-option" onclick="selMood(this,'cozy','🍂','Cozy')"><div class="mood-option-emoji">🍂</div><div class="mood-option-label">Cozy</div></div>
+        <div class="mood-option" onclick="selMood(this,'excited','🔥','Excited')"><div class="mood-option-emoji">🔥</div><div class="mood-option-label">Excited</div></div>
+        <div class="mood-option" onclick="selMood(this,'sad','😔','Sad')"><div class="mood-option-emoji">😔</div><div class="mood-option-label">Sad</div></div>
+        <div class="mood-option" onclick="selMood(this,'missing','💭','Missing You')"><div class="mood-option-emoji">💭</div><div class="mood-option-label">Missing You</div></div>
+      </div>
+      <div class="form-group" style="margin-top:12px;"><textarea class="form-textarea" id="mood-note" placeholder="What's on your mind? (optional)" style="min-height:60px;"></textarea></div>
+      <button class="btn-primary" id="mood-save-btn" onclick="saveMood()">Set the Mood 🎭</button>
+    </div>
+    <div id="mood-history"><div class="loading">Loading mood history… 🎭</div></div>
+  </div>
+</div>
+
+<!-- MODALS -->
+<div class="modal-overlay" id="modal-memory">
+  <div class="modal">
+    <div class="modal-title">Add a Memory 📸 <button class="modal-close" onclick="closeModal('modal-memory')">✕</button></div>
+    <div class="form-group"><label class="form-label">Title</label><input class="form-input" id="mem-title" placeholder="e.g. Our first date 🌹"></div>
+    <div class="form-group"><label class="form-label">Date</label><input class="form-input" id="mem-date" type="date"></div>
+    <div class="form-group"><label class="form-label">Story</label><textarea class="form-textarea" id="mem-story" placeholder="What made this moment unforgettable? 🌹"></textarea></div>
+    <div class="form-group"><label class="form-label">Emoji</label><input class="form-input" id="mem-emoji" placeholder="🌹" maxlength="4"></div>
+    <button class="btn-primary" id="mem-save-btn" onclick="saveMemory()">Save This Memory 📸</button>
+  </div>
+</div>
+
+<div class="modal-overlay" id="modal-pin">
+  <div class="modal">
+    <div class="modal-title">Pin a Place 🗺️ <button class="modal-close" onclick="closeModal('modal-pin')">✕</button></div>
+    <div class="form-group"><label class="form-label">Place Name</label><input class="form-input" id="pin-name" placeholder="e.g. Where we first met ❤️"></div>
+    <div class="form-group"><label class="form-label">Why is this place special?</label><textarea class="form-textarea" id="pin-desc" placeholder="Tell the story of this place… 🌹"></textarea></div>
+    <div class="form-group"><label class="form-label">Emoji</label><input class="form-input" id="pin-emoji" placeholder="📍" maxlength="4"></div>
+    <button class="btn-primary" id="pin-save-btn" onclick="savePin()">Pin This Place 🗺️</button>
+  </div>
+</div>
+
+<div class="modal-overlay" id="modal-goal">
+  <div class="modal">
+    <div class="modal-title">Add a Goal 🎯 <button class="modal-close" onclick="closeModal('modal-goal')">✕</button></div>
+    <div class="form-group"><label class="form-label">Goal</label><input class="form-input" id="goal-text" placeholder="e.g. Take a trip together 🌍"></div>
+    <div class="form-group"><label class="form-label">Period</label>
+      <select class="form-select" id="goal-period">
+        <option value="monthly">📅 Monthly</option>
+        <option value="yearly">🗓️ Yearly</option>
+        <option value="bucket">✨ Bucket List</option>
+      </select>
+    </div>
+    <div class="form-group"><label class="form-label">Emoji</label><input class="form-input" id="goal-emoji" placeholder="🎯" maxlength="4"></div>
+    <button class="btn-primary" id="goal-save-btn" onclick="saveGoal()">Add This Goal 🎯</button>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+const BIN_ID = '6a2f0862da38895dfec00465';
+const API_KEY = '$2a$10$EFs3KNVI9xJNb1cXs561COhPvGH2sAy2eMp75UhMd.ud8bh7c10K6';
+const BIN_URL = `https://api.jsonbin.io/v3/b/${BIN_ID}`;
+const PASSWORD = 'marilex';
+
+let DB = { universe_memories:[], universe_questions:[], universe_music:[], universe_messages:[], universe_stars:[], universe_goals:[], universe_pins:[], universe_moods:[] };
+
+const DAILY_QUESTIONS = [
+  "What is one thing about me that you never want to change?",
+  "If we could travel anywhere tomorrow, where would you take me?",
+  "What was the moment you knew you loved me?",
+  "What's your favourite memory of us so far?",
+  "What does a perfect day with me look like to you?",
+  "What's one thing I do that always makes you smile?",
+  "If you could relive one moment with me, which would it be?",
+  "What's one dream you have that you want us to build together?",
+  "What song always makes you think of me?",
+  "What's something you've never told me but want to?",
+  "How has loving me changed you?",
+  "What's one thing you love about who we are as a couple?",
+  "What would you do to make me feel special this week?",
+  "If you wrote me a letter, what would it say?",
+  "What's one fear you have that I help you face?",
+  "What's the little thing I do that means the most to you?",
+  "If our love was a movie, what would it be called?",
+  "What do you think our biggest strength as a couple is?",
+  "What's something new you want us to experience together?",
+  "What does home feel like to you when you're with me?",
+  "What's one promise you want to make to me today?",
+  "If you had to describe our love in three words, what would they be?",
+  "What makes you feel most loved by me?",
+  "What's one thing you're grateful for about our relationship?",
+  "What's a side of yourself you only show me?",
+  "How do you know when I'm having a hard day?",
+  "What's one thing you want us to always remember?",
+  "If you could send me any message right now, what would it say?",
+  "What's one way I make your life better?",
+  "What does forever mean to you?"
+];
+
+const QUOTES = [
+  '"You are my favourite place in the world"',
+  '"I found my home in your arms"',
+  '"Every love story is beautiful, but ours is my favourite"',
+  '"You are the best thing that has ever been mine"',
+  '"In a sea of people, my eyes will always search for you"',
+  '"You make ordinary moments feel extraordinary"',
+  '"I love you more than yesterday, less than tomorrow"',
+  '"You are my person"'
+];
+
+// ══ JSONBIN ══
+async function loadDB() {
+  const res = await fetch(BIN_URL + '/latest', {
+    method: 'GET',
+    headers: { 'X-Master-Key': API_KEY, 'X-Bin-Meta': 'false', 'Content-Type': 'application/json' }
+  });
+  if (!res.ok) { const e = await res.text(); throw new Error('Status ' + res.status + ': ' + e.slice(0,60)); }
+  const json = await res.json();
+  const data = json.record !== undefined ? json.record : json;
+  DB.universe_memories = data.universe_memories || [];
+  DB.universe_questions = data.universe_questions || [];
+  DB.universe_music = data.universe_music || [];
+  DB.universe_messages = data.universe_messages || [];
+  DB.universe_stars = data.universe_stars || [];
+  DB.universe_goals = data.universe_goals || [];
+  DB.universe_pins = data.universe_pins || [];
+  DB.universe_moods = data.universe_moods || [];
+  // preserve other keys
+  Object.keys(data).forEach(k => { if (!DB.hasOwnProperty(k)) DB[k] = data[k]; });
+}
+
+async function saveDB() {
+  const res = await fetch(BIN_URL, {
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json', 'X-Master-Key': API_KEY, 'X-Bin-Meta': 'false' },
+    body: JSON.stringify(DB)
+  });
+  if (!res.ok) { const e = await res.text(); throw new Error(e.slice(0,80)); }
+}
+
+// ══ LOCK ══
+async function tryUnlock() {
+  const val = document.getElementById('lock-input').value.trim().toLowerCase();
+  if (val !== PASSWORD) {
+    document.getElementById('lock-err').style.display = 'block';
+    document.getElementById('lock-input').value = '';
+    setTimeout(() => document.getElementById('lock-err').style.display = 'none', 2500);
+    return;
+  }
+  const status = document.getElementById('lock-status');
+  const btn = document.querySelector('.lock-btn');
+  status.style.display = 'block'; btn.disabled = true;
+  try {
+    await loadDB();
+    document.getElementById('view-lock').classList.remove('active');
+    document.getElementById('main-nav').style.display = 'block';
+    spawnParticles();
+    showView('home');
+  } catch(e) {
+    status.textContent = 'Error: ' + e.message;
+    btn.disabled = false;
+  }
+}
+document.getElementById('lock-input').addEventListener('keydown', e => { if(e.key==='Enter') tryUnlock(); });
+
+// ══ NAV ══
+function showView(name) {
+  document.querySelectorAll('.view').forEach(v => { if(v.id!=='view-lock') v.classList.remove('active'); });
+  document.getElementById('view-'+name).classList.add('active');
+  document.querySelectorAll('.nav-tab').forEach(t=>t.classList.remove('active'));
+  const map={home:0,question:1,memories:2,map:3,music:4,messages:5,jar:6,goals:7,mood:8};
+  const tabs=document.querySelectorAll('.nav-tab');
+  if(tabs[map[name]]) tabs[map[name]].classList.add('active');
+  window.scrollTo(0,0);
+  const loaders={home:renderHome,question:renderQuestion,memories:renderMemories,map:renderMap,music:renderMusic,messages:renderMessages,jar:renderJar,goals:renderGoals,mood:renderMoodHistory};
+  if(loaders[name]) loaders[name]();
+}
+
+// ══ MODALS ══
+function openModal(id){document.getElementById(id).classList.add('open');}
+function closeModal(id){document.getElementById(id).classList.remove('open');}
+document.querySelectorAll('.modal-overlay').forEach(m=>m.addEventListener('click',e=>{if(e.target===m)m.classList.remove('open');}));
+
+// ══ TOAST ══
+function showToast(msg,gold=false){
+  const el=document.getElementById('toast');
+  el.textContent=msg; el.className='toast'+(gold?' gold':'')+' show';
+  setTimeout(()=>el.classList.remove('show'),2800);
+}
+function setBtn(id,loading,orig){const b=document.getElementById(id);if(!b)return;b.disabled=loading;b.textContent=loading?'Saving… ✨':orig;}
+function esc(s){return s?String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'):''}
+function fmtDate(d){return new Date(d).toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'});}
+function fmtTime(d){return new Date(d).toLocaleString('en-GB',{day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'});}
+function uid(){return Date.now().toString(36)+Math.random().toString(36).slice(2);}
+
+// Who selectors
+const whoState={};
+function selWho(ctx,who){
+  whoState[ctx]=who;
+  ['mari','alex'].forEach(w=>{
+    const el=document.getElementById(ctx+'-'+w);
+    if(el) el.className='who-btn'+(who===w.charAt(0).toUpperCase()+w.slice(1)?(w==='mari'?' sel-mari':' sel-alex'):'');
+  });
+}
+
+// Mood selector
+let selMoodData={};
+function selMood(el,key,emoji,label){
+  selMoodData={key,emoji,label};
+  document.querySelectorAll('.mood-option').forEach(m=>m.classList.remove('selected'));
+  el.classList.add('selected');
+}
+
+// ══ HOME ══
+function renderHome(){
+  document.getElementById('home-quote').textContent=QUOTES[Math.floor(Math.random()*QUOTES.length)];
+  document.getElementById('ht-mem').textContent=DB.universe_memories.length+' photos';
+  document.getElementById('ht-stars').textContent=DB.universe_stars.length+' stars';
+  document.getElementById('ht-goals').textContent=DB.universe_goals.length+' goals';
+  document.getElementById('ht-pins').textContent=DB.universe_pins.length+' pins';
+
+  // Daily question
+  const today=new Date().toDateString();
+  const qIdx=Math.abs([...today].reduce((a,c)=>a+c.charCodeAt(0),0))%DAILY_QUESTIONS.length;
+  document.getElementById('home-dq').textContent=DAILY_QUESTIONS[qIdx];
+
+  // Latest message
+  if(DB.universe_messages.length){
+    const m=DB.universe_messages[0];
+    document.getElementById('home-msg').style.display='block';
+    const icons={night:'🌙',morning:'☀️',thinking:'💭',love:'❤️'};
+    document.getElementById('home-msg-type').textContent=(icons[m.type]||'💌')+' From '+m.who;
+    document.getElementById('home-msg-text').textContent='"'+m.text.slice(0,100)+(m.text.length>100?'…':'"');
+    document.getElementById('home-msg-meta').textContent=fmtTime(m.time);
+  }
+
+  // Mood indicator
+  if(DB.universe_moods.length){
+    const m=DB.universe_moods[0];
+    document.getElementById('mood-label').textContent=m.emoji+' '+m.label;
+    document.getElementById('mood-dot').style.background=m.key==='romantic'?'#be185d':m.key==='happy'?'#d4a017':m.key==='sad'?'#3b82f6':'#c0182a';
+  }
+}
+
+// ══ DAILY QUESTION ══
+function renderQuestion(){
+  const today=new Date().toDateString();
+  const qIdx=Math.abs([...today].reduce((a,c)=>a+c.charCodeAt(0),0))%DAILY_QUESTIONS.length;
+  const q=DAILY_QUESTIONS[qIdx];
+  document.getElementById('dq-main').textContent=q;
+
+  // Today's answers
+  const todayAnswers=DB.universe_questions.filter(a=>new Date(a.time).toDateString()===today);
+  const ansEl=document.getElementById('dq-answers');
+  if(todayAnswers.length){
+    ansEl.innerHTML=todayAnswers.map(a=>`
+      <div class="dq-answer">
+        <div class="dq-answer-who">${esc(a.who)} ${a.who==='Mari'?'🌸':'❤️'}</div>
+        <div class="dq-answer-text">"${esc(a.answer)}"</div>
+      </div>`).join('');
+  } else {
+    ansEl.innerHTML='<div style="font-size:0.78rem;color:var(--muted);font-style:italic;">No answers yet today — be the first 💬</div>';
+  }
+
+  // Past questions
+  const past=document.getElementById('past-questions');
+  const grouped={};
+  DB.universe_questions.forEach(a=>{
+    const d=new Date(a.time).toDateString();
+    if(!grouped[d]) grouped[d]={question:a.question,answers:[]};
+    grouped[d].answers.push(a);
+  });
+  const days=Object.keys(grouped).filter(d=>d!==today).slice(0,10);
+  if(!days.length){past.innerHTML='<div class="empty">No past questions yet 💬</div>';return;}
+  past.innerHTML=days.map(d=>`
+    <div class="card" style="margin-bottom:10px;">
+      <div style="font-size:0.6rem;color:var(--muted);margin-bottom:6px;">${d}</div>
+      <div style="font-family:'Playfair Display',serif;font-size:0.88rem;color:var(--gold);font-style:italic;margin-bottom:10px;">${esc(grouped[d].question)}</div>
+      ${grouped[d].answers.map(a=>`<div style="margin-bottom:6px;"><span style="font-size:0.6rem;color:var(--muted);text-transform:uppercase;letter-spacing:0.08em;">${esc(a.who)} ${a.who==='Mari'?'🌸':'❤️'}</span><div style="font-size:0.82rem;color:var(--white);font-style:italic;margin-top:3px;">"${esc(a.answer)}"</div></div>`).join('')}
+    </div>`).join('');
+}
+
+async function saveDQAnswer(){
+  if(!whoState.dq){showToast('Choose who is answering 💬');return;}
+  const answer=document.getElementById('dq-answer').value.trim();
+  if(!answer){showToast('Write your answer first 💬');return;}
+  const today=new Date().toDateString();
+  const qIdx=Math.abs([...today].reduce((a,c)=>a+c.charCodeAt(0),0))%DAILY_QUESTIONS.length;
+  setBtn('dq-save-btn',true,'Share My Answer 💬');
+  try{
+    DB.universe_questions.unshift({id:uid(),who:whoState.dq,question:DAILY_QUESTIONS[qIdx],answer,time:new Date().toISOString()});
+    await saveDB();
+    document.getElementById('dq-answer').value='';
+    showToast('Answer shared 💬',true);
+    renderQuestion();
+  }catch(e){showToast('Could not save 💔 Check internet');DB.universe_questions.shift();}
+  setBtn('dq-save-btn',false,'Share My Answer 💬');
+}
+
+// ══ MEMORIES ══
+function renderMemories(){
+  const grid=document.getElementById('polaroids-grid');
+  if(!DB.universe_memories.length){grid.innerHTML='<div class="empty" style="grid-column:span 2;">No memories yet 📸<br>Add your first one above</div>';return;}
+  const rots=['-2deg','1.5deg','-1deg','2.5deg','-1.5deg','2deg'];
+  grid.innerHTML=DB.universe_memories.map((m,i)=>`
+    <div class="polaroid" style="--rot:${rots[i%rots.length]}">
+      <div class="polaroid-img">${esc(m.emoji)||'📸'}</div>
+      <div class="polaroid-caption">${esc(m.title)}</div>
+      <div class="polaroid-date">${fmtDate(m.date||m.time)}</div>
+    </div>`).join('');
+}
+
+async function saveMemory(){
+  const title=document.getElementById('mem-title').value.trim();
+  const date=document.getElementById('mem-date').value;
+  const story=document.getElementById('mem-story').value.trim();
+  const emoji=document.getElementById('mem-emoji').value.trim()||'🌹';
+  if(!title){showToast('Add a title first 🌹');return;}
+  setBtn('mem-save-btn',true,'Save This Memory 📸');
+  try{
+    DB.universe_memories.unshift({id:uid(),title,date,story,emoji,time:new Date().toISOString()});
+    await saveDB();
+    closeModal('modal-memory');
+    ['mem-title','mem-date','mem-story','mem-emoji'].forEach(id=>document.getElementById(id).value='');
+    showToast('Memory saved forever 📸',true);
+    renderMemories();
+  }catch(e){showToast('Could not save 💔 Check internet');DB.universe_memories.shift();}
+  setBtn('mem-save-btn',false,'Save This Memory 📸');
+}
+
+// ══ MAP ══
+function renderMap(){
+  const list=document.getElementById('pin-list');
+  const vis=document.getElementById('map-visual');
+  if(!DB.universe_pins.length){list.innerHTML='<div class="empty">No places pinned yet 🗺️<br>Add your first special place above</div>';vis.innerHTML='<span style="position:relative;z-index:1;">🗺️ Your special places will appear here</span>';return;}
+  // Show pins on visual
+  const pinPositions=[[20,30],[70,60],[50,20],[30,70],[80,40],[15,65],[60,80]];
+  vis.innerHTML=DB.universe_pins.map((p,i)=>{
+    const pos=pinPositions[i%pinPositions.length];
+    return `<div class="map-pin" style="left:${pos[0]}%;top:${pos[1]}%;">${esc(p.emoji)||'📍'}<div class="map-pin-label">${esc(p.name)}</div></div>`;
+  }).join('');
+  list.innerHTML=DB.universe_pins.map(p=>`
+    <div class="pin-list-item">
+      <span class="pin-emoji">${esc(p.emoji)||'📍'}</span>
+      <div class="pin-info">
+        <div class="pin-name">${esc(p.name)}</div>
+        ${p.desc?`<div class="pin-desc">${esc(p.desc)}</div>`:''}
+      </div>
+    </div>`).join('');
+}
+
+async function savePin(){
+  const name=document.getElementById('pin-name').value.trim();
+  const desc=document.getElementById('pin-desc').value.trim();
+  const emoji=document.getElementById('pin-emoji').value.trim()||'📍';
+  if(!name){showToast('Add a place name 🗺️');return;}
+  setBtn('pin-save-btn',true,'Pin This Place 🗺️');
+  try{
+    DB.universe_pins.push({id:uid(),name,desc,emoji,time:new Date().toISOString()});
+    await saveDB();
+    closeModal('modal-pin');
+    ['pin-name','pin-desc','pin-emoji'].forEach(id=>document.getElementById(id).value='');
+    showToast('Place pinned on our map! 🗺️',true);
+    renderMap();
+  }catch(e){showToast('Could not save 💔 Check internet');DB.universe_pins.pop();}
+  setBtn('pin-save-btn',false,'Pin This Place 🗺️');
+}
+
+// ══ MUSIC ══
+function renderMusic(){
+  const list=document.getElementById('music-list');
+  if(!DB.universe_music.length){list.innerHTML='<div class="empty">No songs yet 🎵<br>Share what you\'re listening to</div>';return;}
+  list.innerHTML=DB.universe_music.map(m=>`
+    <div class="playing-card">
+      <div class="playing-disc"">🎵</div>
+      <div class="playing-info">
+        <div class="playing-who">${esc(m.who)} ${m.who==='Mari'?'🌸':'❤️'}</div>
+        <div class="playing-song">${esc(m.song)}</div>
+        ${m.note?`<div class="playing-note">${esc(m.note)}</div>`:''}
+      </div>
+      <div style="font-size:0.6rem;color:var(--muted);">${fmtTime(m.time)}</div>
+    </div>`).join('');
+}
+
+async function saveMusic(){
+  if(!whoState.music){showToast('Choose who is sharing 🎵');return;}
+  const song=document.getElementById('music-song').value.trim();
+  const note=document.getElementById('music-note').value.trim();
+  if(!song){showToast('Add the song name 🎵');return;}
+  setBtn('music-save-btn',true,'Share This Song 🎵');
+  try{
+    DB.universe_music.unshift({id:uid(),who:whoState.music,song,note,time:new Date().toISOString()});
+    if(DB.universe_music.length>30) DB.universe_music=DB.universe_music.slice(0,30);
+    await saveDB();
+    ['music-song','music-note'].forEach(id=>document.getElementById(id).value='');
+    showToast('This song is ours forever 🎵',true);
+    renderMusic();
+  }catch(e){showToast('Could not save 💔 Check internet');DB.universe_music.shift();}
+  setBtn('music-save-btn',false,'Share This Song 🎵');
+}
+
+// ══ MESSAGES ══
+function renderMessages(){
+  const list=document.getElementById('messages-list');
+  if(!DB.universe_messages.length){list.innerHTML='<div class="empty">No messages yet 🌙<br>Leave one for your love</div>';return;}
+  const icons={night:'🌙',morning:'☀️',thinking:'💭',love:'❤️'};
+  const labels={night:'Good Night',morning:'Good Morning',thinking:'Thinking of You',love:'Just Because'};
+  list.innerHTML=DB.universe_messages.map(m=>`
+    <div class="message-card ${m.type==='morning'?'morning':'night'}">
+      <div class="message-type ${m.type==='morning'?'morning':'night'}">${icons[m.type]||'💌'} ${labels[m.type]||''} · From ${esc(m.who)} ${m.who==='Mari'?'🌸':'❤️'}</div>
+      <div class="message-text">"${esc(m.text)}"</div>
+      <div class="message-meta">${fmtTime(m.time)}</div>
+      <div class="message-bg">${icons[m.type]||'💌'}</div>
+    </div>`).join('');
+}
+
+async function saveMessage(){
+  if(!whoState.msg){showToast('Choose who is sending 🌙');return;}
+  const text=document.getElementById('msg-text').value.trim();
+  const type=document.getElementById('msg-type').value;
+  if(!text){showToast('Write your message first 🌙');return;}
+  setBtn('msg-save-btn',true,'Send This Message 🌙');
+  try{
+    DB.universe_messages.unshift({id:uid(),who:whoState.msg,type,text,time:new Date().toISOString()});
+    if(DB.universe_messages.length>50) DB.universe_messages=DB.universe_messages.slice(0,50);
+    await saveDB();
+    document.getElementById('msg-text').value='';
+    showToast('Message sent with love 🌙',true);
+    renderMessages();
+  }catch(e){showToast('Could not save 💔 Check internet');DB.universe_messages.shift();}
+  setBtn('msg-save-btn',false,'Send This Message 🌙');
+}
+
+// ══ STAR JAR ══
+function renderJar(){
+  const stars=DB.universe_stars;
+  document.getElementById('jar-count').textContent=stars.length;
+  const vis=document.getElementById('jar-visual');
+  if(!stars.length){vis.textContent='Empty for now… add your first star ⭐';return;}
+  vis.textContent=Array(Math.min(stars.length,80)).fill('⭐').join('');
+  const list=document.getElementById('star-list');
+  list.innerHTML=stars.slice(0,20).map(s=>`
+    <div class="star-item">
+      <span class="star-item-emoji">⭐</span>
+      <span class="star-item-text">${esc(s.text)}</span>
+      <span class="star-item-who">${esc(s.who)} ${s.who==='Mari'?'🌸':'❤️'}</span>
+      <span class="star-item-date">${fmtDate(s.time)}</span>
+    </div>`).join('');
+}
+
+async function saveStar(){
+  if(!whoState.jar){showToast('Choose who is adding ⭐');return;}
+  const text=document.getElementById('jar-text').value.trim();
+  if(!text){showToast('What good thing happened? ⭐');return;}
+  setBtn('jar-save-btn',true,'Add to Our Jar ⭐');
+  try{
+    DB.universe_stars.unshift({id:uid(),who:whoState.jar,text,time:new Date().toISOString()});
+    await saveDB();
+    document.getElementById('jar-text').value='';
+    showToast('Star added! Our jar is growing ⭐',true);
+    renderJar();
+  }catch(e){showToast('Could not save 💔 Check internet');DB.universe_stars.shift();}
+  setBtn('jar-save-btn',false,'Add to Our Jar ⭐');
+}
+
+// ══ GOALS ══
+function renderGoals(){
+  const list=document.getElementById('goals-list');
+  if(!DB.universe_goals.length){list.innerHTML='<div class="empty">No goals yet 🎯<br>Set your first one together</div>';return;}
+  const groups={monthly:[],yearly:[],bucket:[]};
+  DB.universe_goals.forEach(g=>groups[g.period]&&groups[g.period].push(g));
+  let html='';
+  const gLabels={monthly:'📅 Monthly Goals',yearly:'🗓️ Yearly Goals',bucket:'✨ Bucket List'};
+  Object.keys(groups).forEach(period=>{
+    if(!groups[period].length) return;
+    html+=`<div style="font-size:0.65rem;color:var(--muted);text-transform:uppercase;letter-spacing:0.12em;margin:16px 0 8px;">${gLabels[period]}</div>`;
+    html+=`<div class="card">`+groups[period].map(g=>`
+      <div class="goal-item ${g.done?'done':''}" onclick="toggleGoal('${g.id}')">
+        <div class="goal-check">${g.done?'✓':''}</div>
+        <span style="font-size:1rem;margin-right:4px;">${esc(g.emoji)||'🎯'}</span>
+        <span class="goal-text">${esc(g.text)}</span>
+      </div>`).join('')+`</div>`;
+  });
+  list.innerHTML=html;
+}
+
+async function saveGoal(){
+  const text=document.getElementById('goal-text').value.trim();
+  const period=document.getElementById('goal-period').value;
+  const emoji=document.getElementById('goal-emoji').value.trim()||'🎯';
+  if(!text){showToast('Add a goal first 🎯');return;}
+  setBtn('goal-save-btn',true,'Add This Goal 🎯');
+  try{
+    DB.universe_goals.push({id:uid(),text,period,emoji,done:false,time:new Date().toISOString()});
+    await saveDB();
+    closeModal('modal-goal');
+    ['goal-text','goal-emoji'].forEach(id=>document.getElementById(id).value='');
+    showToast('Goal added! You\'ve got this 🎯',true);
+    renderGoals();
+  }catch(e){showToast('Could not save 💔 Check internet');DB.universe_goals.pop();}
+  setBtn('goal-save-btn',false,'Add This Goal 🎯');
+}
+
+async function toggleGoal(id){
+  const g=DB.universe_goals.find(g=>g.id===id);
+  if(!g) return;
+  g.done=!g.done;
+  try{await saveDB();showToast(g.done?'Goal achieved! 🏆':'Back on the list!',g.done);renderGoals();}
+  catch(e){g.done=!g.done;showToast('Could not update 💔');}
+}
+
+// ══ MOOD ══
+async function saveMood(){
+  if(!whoState.mood){showToast('Choose who is setting the mood 🎭');return;}
+  if(!selMoodData.key){showToast('Pick a mood 🎭');return;}
+  const note=document.getElementById('mood-note').value.trim();
+  setBtn('mood-save-btn',true,'Set the Mood 🎭');
+  try{
+    DB.universe_moods.unshift({id:uid(),who:whoState.mood,...selMoodData,note,time:new Date().toISOString()});
+    if(DB.universe_moods.length>30) DB.universe_moods=DB.universe_moods.slice(0,30);
+    await saveDB();
+    document.getElementById('mood-note').value='';
+    document.querySelectorAll('.mood-option').forEach(m=>m.classList.remove('selected'));
+    selMoodData={};
+    showToast('Mood set! The universe feels it 🎭',true);
+    renderMoodHistory();
+    // Update indicator
+    const latest=DB.universe_moods[0];
+    document.getElementById('mood-label').textContent=latest.emoji+' '+latest.label;
+  }catch(e){showToast('Could not save 💔 Check internet');DB.universe_moods.shift();}
+  setBtn('mood-save-btn',false,'Set the Mood 🎭');
+}
+
+function renderMoodHistory(){
+  const hist=document.getElementById('mood-history');
+  if(!DB.universe_moods.length){hist.innerHTML='<div class="empty">No moods set yet 🎭</div>';return;}
+  hist.innerHTML='<div class="section-head"><span>📋</span><div class="section-title">Mood History</div></div>'+
+    DB.universe_moods.slice(0,10).map(m=>`
+      <div class="card" style="display:flex;align-items:center;gap:12px;margin-bottom:8px;">
+        <span style="font-size:1.6rem;">${esc(m.emoji)}</span>
+        <div style="flex:1;">
+          <div style="font-size:0.84rem;color:var(--white);font-weight:500;">${esc(m.label)}${m.note?' — <span style="color:var(--muted);font-style:italic;">'+esc(m.note.slice(0,40))+'</span>':''}</div>
+          <div style="font-size:0.62rem;color:var(--gold);margin-top:2px;">${esc(m.who)} ${m.who==='Mari'?'🌸':'❤️'} · ${fmtTime(m.time)}</div>
+        </div>
+      </div>`).join('');
+}
+
+// ══ PARTICLES ══
+function spawnParticles(){
+  const container=document.getElementById('particles');
+  const emojis=['❤️','🌹','💋','⭐','✨','💫','🔥','💕','🥰','🌌','💖','🎵'];
+  setInterval(()=>{
+    const p=document.createElement('div');
+    p.className='particle';
+    p.textContent=emojis[Math.floor(Math.random()*emojis.length)];
+    p.style.left=Math.random()*100+'%';
+    p.style.fontSize=(0.7+Math.random()*0.9)+'rem';
+    p.style.animationDuration=(10+Math.random()*14)+'s';
+    container.appendChild(p);
+    setTimeout(()=>p.remove(),24000);
+  },2000);
+}
+</script>
+</body>
+</html>
