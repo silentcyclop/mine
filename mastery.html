@@ -1,0 +1,1599 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, viewport-fit=cover">
+<title>MASTERy — Personal Life University</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,500&family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#0b0b0f;
+  --bg-elev:#131319;
+  --bg-card:#16161d;
+  --line:rgba(255,255,255,0.08);
+  --gold:#d4af6a;
+  --gold-soft:rgba(212,175,106,0.16);
+  --gold-glow:rgba(212,175,106,0.35);
+  --text:#f3f0ea;
+  --text-dim:#9a97a3;
+  --text-faint:#65626e;
+  --danger:#c9636a;
+  --good:#7fb88a;
+  --radius:20px;
+  --radius-sm:12px;
+  --serif:'Cormorant Garamond', serif;
+  --sans:'Quicksand', sans-serif;
+}
+*{box-sizing:border-box; -webkit-tap-highlight-color:transparent;}
+html,body{margin:0;padding:0;background:var(--bg);color:var(--text);font-family:var(--sans);overscroll-behavior-y:none;}
+body{min-height:100vh; padding-bottom:88px;}
+::-webkit-scrollbar{display:none;}
+*{scrollbar-width:none;}
+a{color:inherit; text-decoration:none;}
+button{font-family:inherit; cursor:pointer; border:none; background:none; color:inherit;}
+h1,h2,h3,h4{font-family:var(--serif); font-weight:600; margin:0; letter-spacing:0.01em;}
+p{margin:0;}
+
+.app{max-width:520px; margin:0 auto; min-height:100vh; position:relative;}
+
+/* Top bar */
+.topbar{display:flex; align-items:center; justify-content:space-between; padding:22px 20px 8px;}
+.brand{font-family:var(--serif); font-size:22px; font-weight:700; letter-spacing:0.06em; color:var(--gold);}
+.brand span{color:var(--text-faint); font-size:12px; letter-spacing:0.12em; display:block; font-family:var(--sans); margin-top:-2px; text-transform:uppercase;}
+.icon-btn{width:38px;height:38px;border-radius:50%;background:var(--bg-card);border:1px solid var(--line);display:flex;align-items:center;justify-content:center;font-size:16px;}
+
+.view{padding:14px 20px 30px; animation:fadein 0.25s ease;}
+@keyframes fadein{from{opacity:0; transform:translateY(6px);} to{opacity:1; transform:translateY(0);}}
+
+/* Dashboard hero */
+.greeting{font-family:var(--serif); font-size:26px; margin-bottom:4px;}
+.subline{color:var(--text-dim); font-size:14.5px; line-height:1.5; margin-bottom:22px; max-width:340px;}
+
+.mastery-card{
+  background:radial-gradient(120% 140% at 20% 0%, rgba(212,175,106,0.1), transparent 55%), var(--bg-card);
+  border:1px solid var(--line); border-radius:var(--radius); padding:22px;
+  display:flex; align-items:center; gap:18px; margin-bottom:16px;
+}
+.ring-wrap{position:relative; width:88px; height:88px; flex:0 0 auto;}
+.ring-wrap svg{transform:rotate(-90deg);}
+.ring-label{position:absolute; inset:0; display:flex; flex-direction:column; align-items:center; justify-content:center;}
+.ring-label .pct{font-family:var(--serif); font-size:22px; font-weight:700; color:var(--gold);}
+.ring-label .cap{font-size:9px; text-transform:uppercase; letter-spacing:0.08em; color:var(--text-faint);}
+.mastery-meta .m-title{font-size:11px; text-transform:uppercase; letter-spacing:0.1em; color:var(--text-faint); margin-bottom:4px;}
+.mastery-meta .m-sub{color:var(--text-dim); font-size:13px; line-height:1.5;}
+
+.stat-row{display:flex; gap:12px; margin-bottom:22px;}
+.stat-chip{flex:1; background:var(--bg-card); border:1px solid var(--line); border-radius:var(--radius-sm); padding:14px 12px;}
+.stat-chip .s-label{font-size:10.5px; text-transform:uppercase; letter-spacing:0.08em; color:var(--text-faint); margin-bottom:6px;}
+.stat-chip .s-value{font-family:var(--serif); font-size:19px; font-weight:600;}
+.xp-bar-track{height:6px; border-radius:4px; background:rgba(255,255,255,0.06); margin-top:8px; overflow:hidden;}
+.xp-bar-fill{height:100%; background:linear-gradient(90deg,var(--gold),#f2d9a6); border-radius:4px; transition:width .4s ease;}
+
+.section-label{display:flex; align-items:center; justify-content:space-between; margin:26px 0 12px;}
+.section-label h3{font-size:19px;}
+.section-label .see-all{font-size:12px; color:var(--gold); text-transform:uppercase; letter-spacing:0.06em;}
+
+.mission-card{
+  background:linear-gradient(155deg, rgba(212,175,106,0.1), rgba(212,175,106,0.02) 60%), var(--bg-card);
+  border:1px solid var(--gold-soft); border-radius:var(--radius); padding:18px; margin-bottom:8px;
+}
+.mission-card .m-head{font-size:11px; letter-spacing:0.12em; text-transform:uppercase; color:var(--gold); margin-bottom:12px;}
+.mission-item{display:flex; align-items:center; gap:12px; padding:11px 0; border-top:1px solid var(--line);}
+.mission-item:first-of-type{border-top:none;}
+.m-check{width:22px;height:22px;border-radius:50%;border:1.5px solid var(--text-faint); flex:0 0 auto; display:flex; align-items:center; justify-content:center; font-size:12px;}
+.m-check.done{background:var(--gold); border-color:var(--gold); color:#1a1305;}
+.mission-item .m-text{flex:1;}
+.mission-item .m-text .m-cat{font-size:10px; text-transform:uppercase; letter-spacing:0.08em; color:var(--text-faint);}
+.mission-item .m-text .m-name{font-size:14.5px; margin-top:1px;}
+.mission-item.done .m-name{color:var(--text-faint); text-decoration:line-through;}
+
+.next-step-card{background:var(--bg-card); border:1px solid var(--line); border-radius:var(--radius); padding:16px 18px; display:flex; align-items:center; gap:14px; margin-bottom:6px;}
+.next-step-card .ns-icon{width:40px;height:40px;border-radius:12px; background:var(--gold-soft); display:flex; align-items:center; justify-content:center; font-size:18px; flex:0 0 auto;}
+.next-step-card .ns-label{font-size:10.5px; text-transform:uppercase; letter-spacing:0.08em; color:var(--gold); margin-bottom:2px;}
+.next-step-card .ns-title{font-size:15px;}
+.next-step-card .ns-arrow{margin-left:auto; color:var(--text-faint);}
+
+/* Academy grid */
+.academy-grid{display:grid; grid-template-columns:1fr 1fr; gap:12px;}
+.academy-card{background:var(--bg-card); border:1px solid var(--line); border-radius:var(--radius-sm); padding:16px 14px; position:relative; overflow:hidden;}
+.academy-card .a-icon{font-size:24px; margin-bottom:10px; display:block;}
+.academy-card .a-name{font-family:var(--serif); font-size:16px; font-weight:600; margin-bottom:8px;}
+.academy-card .a-pct{font-size:11px; color:var(--text-dim);}
+.academy-card .a-bar{height:4px; border-radius:3px; background:rgba(255,255,255,0.06); margin-top:6px; overflow:hidden;}
+.academy-card .a-bar-fill{height:100%; border-radius:3px;}
+
+/* generic card list */
+.card-list{display:flex; flex-direction:column; gap:10px;}
+.lesson-row{display:flex; align-items:center; gap:14px; background:var(--bg-card); border:1px solid var(--line); border-radius:var(--radius-sm); padding:14px 16px;}
+.lesson-row.locked{opacity:0.45;}
+.lesson-num{width:32px;height:32px;border-radius:50%; background:var(--bg-elev); border:1px solid var(--line); display:flex; align-items:center; justify-content:center; font-size:13px; flex:0 0 auto;}
+.lesson-num.complete{background:var(--gold); color:#1a1305; border-color:var(--gold);}
+.lesson-info{flex:1;}
+.lesson-info .l-title{font-size:14.5px;}
+.lesson-info .l-meta{font-size:11px; color:var(--text-faint); margin-top:2px;}
+
+/* buttons */
+.btn{display:inline-flex; align-items:center; justify-content:center; gap:8px; padding:14px 20px; border-radius:14px; font-size:14.5px; font-weight:600; width:100%;}
+.btn-primary{background:linear-gradient(120deg,var(--gold),#e8c98a); color:#1a1305;}
+.btn-ghost{background:var(--bg-card); border:1px solid var(--line); color:var(--text);}
+.btn-sm{padding:10px 16px; font-size:13px; width:auto;}
+.btn:disabled{opacity:0.35;}
+
+/* Lesson view */
+.lesson-hero{margin-bottom:18px;}
+.lesson-tag{font-size:11px; text-transform:uppercase; letter-spacing:0.1em; color:var(--gold); margin-bottom:6px;}
+.lesson-hero h2{font-size:26px; line-height:1.15;}
+.lesson-meta-row{display:flex; gap:14px; margin-top:10px; font-size:12px; color:var(--text-faint);}
+.content-block{background:var(--bg-card); border:1px solid var(--line); border-radius:var(--radius); padding:18px; margin-bottom:14px;}
+.content-block h4{font-size:12px; text-transform:uppercase; letter-spacing:0.08em; color:var(--gold); margin-bottom:10px;}
+.content-block p{font-size:15px; line-height:1.65; color:#ded9ce;}
+.content-block ul{margin:0; padding-left:18px; color:#ded9ce; font-size:14.5px; line-height:1.7;}
+.content-block li{margin-bottom:4px;}
+
+/* Quiz */
+.quiz-progress{display:flex; gap:5px; margin-bottom:18px;}
+.quiz-progress .dot{flex:1; height:4px; border-radius:3px; background:rgba(255,255,255,0.08);}
+.quiz-progress .dot.filled{background:var(--gold);}
+.q-text{font-family:var(--serif); font-size:21px; line-height:1.4; margin-bottom:20px;}
+.opt-btn{display:block; width:100%; text-align:left; background:var(--bg-card); border:1px solid var(--line); border-radius:14px; padding:15px 16px; margin-bottom:10px; font-size:14.5px; transition:border-color .15s;}
+.opt-btn.selected{border-color:var(--gold);}
+.opt-btn.correct{border-color:var(--good); background:rgba(127,184,138,0.08);}
+.opt-btn.incorrect{border-color:var(--danger); background:rgba(201,99,106,0.08);}
+textarea.short-answer{width:100%; background:var(--bg-card); border:1px solid var(--line); border-radius:14px; padding:14px 16px; color:var(--text); font-family:inherit; font-size:14.5px; min-height:100px; resize:vertical;}
+.explain-box{background:var(--bg-elev); border-left:2px solid var(--gold); border-radius:0 10px 10px 0; padding:12px 14px; margin-top:14px; font-size:13.5px; color:var(--text-dim); line-height:1.55;}
+
+/* Journal */
+.journal-entry{background:var(--bg-card); border:1px solid var(--line); border-radius:var(--radius-sm); padding:16px; margin-bottom:10px;}
+.journal-entry .j-date{font-size:11px; color:var(--text-faint); margin-bottom:6px;}
+.journal-entry .j-tag{display:inline-block; font-size:10px; background:var(--gold-soft); color:var(--gold); padding:3px 9px; border-radius:20px; margin-right:6px; margin-bottom:8px;}
+.journal-entry .j-field-label{font-size:10.5px; text-transform:uppercase; letter-spacing:0.06em; color:var(--gold); margin-top:8px;}
+.journal-entry .j-field-val{font-size:13.5px; color:#ded9ce; line-height:1.5; margin-top:2px;}
+.field-group{margin-bottom:16px;}
+.field-group label{display:block; font-size:11px; text-transform:uppercase; letter-spacing:0.08em; color:var(--gold); margin-bottom:6px;}
+.field-group textarea, .field-group input{width:100%; background:var(--bg-card); border:1px solid var(--line); border-radius:12px; padding:12px 14px; color:var(--text); font-family:inherit; font-size:14px;}
+.field-group textarea{min-height:64px; resize:vertical;}
+
+/* Nav */
+.tabbar{position:fixed; bottom:0; left:0; right:0; background:rgba(11,11,15,0.9); backdrop-filter:blur(16px); border-top:1px solid var(--line); z-index:50;}
+.tabbar-inner{max-width:520px; margin:0 auto; display:flex; padding:10px 6px calc(10px + env(safe-area-inset-bottom));}
+.tab-btn{flex:1; display:flex; flex-direction:column; align-items:center; gap:3px; padding:4px 0; color:var(--text-faint); font-size:10px; letter-spacing:0.02em;}
+.tab-btn.active{color:var(--gold);}
+.tab-btn .t-icon{font-size:19px;}
+
+.back-row{display:flex; align-items:center; gap:12px; margin-bottom:6px;}
+.back-btn{font-size:20px; color:var(--text-dim);}
+
+.empty-state{text-align:center; padding:50px 20px; color:var(--text-faint);}
+.empty-state .e-icon{font-size:36px; margin-bottom:10px;}
+.empty-state p{font-size:13.5px; line-height:1.6;}
+
+.badge-grid{display:grid; grid-template-columns:1fr 1fr 1fr; gap:10px;}
+.badge{background:var(--bg-card); border:1px solid var(--line); border-radius:var(--radius-sm); padding:14px 8px; text-align:center;}
+.badge.locked{opacity:0.3;}
+.badge .b-icon{font-size:24px; display:block; margin-bottom:6px;}
+.badge .b-name{font-size:10.5px; line-height:1.3; color:var(--text-dim);}
+
+.toast{position:fixed; top:16px; left:50%; transform:translateX(-50%) translateY(-140%); background:var(--gold); color:#1a1305; padding:10px 20px; border-radius:30px; font-size:13px; font-weight:700; z-index:999; transition:transform .3s cubic-bezier(.2,.9,.3,1.3); box-shadow:0 8px 24px rgba(0,0,0,0.4);}
+.toast.show{transform:translateX(-50%) translateY(0);}
+
+.streak-flame{font-size:13px;}
+.settings-row{display:flex; align-items:center; justify-content:space-between; padding:15px 0; border-top:1px solid var(--line);}
+.settings-row:first-child{border-top:none;}
+.settings-row .sr-label{font-size:14.5px;}
+.settings-row .sr-sub{font-size:11.5px; color:var(--text-faint); margin-top:2px;}
+.switch{width:42px; height:24px; border-radius:20px; background:var(--bg-elev); border:1px solid var(--line); position:relative;}
+.switch.on{background:var(--gold-soft); border-color:var(--gold);}
+.switch::after{content:''; position:absolute; width:18px;height:18px; border-radius:50%; background:var(--text-faint); top:2px; left:2px; transition:.2s;}
+.switch.on::after{background:var(--gold); left:20px;}
+
+.pill-row{display:flex; gap:8px; flex-wrap:wrap; margin-bottom:16px;}
+.pill{padding:9px 15px; border-radius:20px; background:var(--bg-card); border:1px solid var(--line); font-size:12.5px; color:var(--text-dim);}
+.pill.active{background:var(--gold-soft); border-color:var(--gold); color:var(--gold);}
+
+.divider-quote{text-align:center; padding:30px 10px; font-family:var(--serif); font-style:italic; color:var(--text-faint); font-size:15px; line-height:1.6;}
+
+.week-grid{display:flex; justify-content:space-between; margin-bottom:20px;}
+.week-day{text-align:center; flex:1;}
+.week-day .wd-label{font-size:10px; color:var(--text-faint); margin-bottom:6px;}
+.week-day .wd-dot{width:26px;height:26px; border-radius:50%; background:var(--bg-card); border:1px solid var(--line); margin:0 auto; display:flex; align-items:center; justify-content:center; font-size:11px;}
+.week-day .wd-dot.active{background:var(--gold); color:#1a1305; border-color:var(--gold);}
+
+.progress-stat-grid{display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:20px;}
+.mastery-list-row{display:flex; align-items:center; gap:12px; padding:12px 0; border-top:1px solid var(--line);}
+.mastery-list-row:first-child{border-top:none;}
+.mastery-list-row .icon{font-size:18px; width:26px;}
+.mastery-list-row .name{flex:1; font-size:14px;}
+.mastery-list-row .track{width:70px; height:5px; background:rgba(255,255,255,0.06); border-radius:3px; overflow:hidden; margin-right:8px;}
+.mastery-list-row .track-fill{height:100%; border-radius:3px;}
+.mastery-list-row .pct{font-size:12.5px; color:var(--text-dim); width:32px; text-align:right;}
+</style>
+</head>
+<body>
+<div class="app" id="app"></div>
+<div class="tabbar"><div class="tabbar-inner" id="tabbar"></div></div>
+<div class="toast" id="toast"></div>
+
+<script>
+/* ============ DATA ============ */
+const ACADEMIES = [
+{id:'money', name:'Money', icon:'💰', color:'#d4af6a', tagline:'Financial literacy & wealth building',
+ lessons:[
+  {id:'m1', title:'Understanding Money', time:8, diff:'Beginner',
+   sections:[
+    {h:'The Idea', p:'Money is a tool humans invented to solve a problem: trading a cow for shoes is hard, because the shoe-maker might not want a cow. Money works as a medium of exchange, a store of value, and a unit of account — it lets value move between people without needing a perfect match of wants.'},
+    {h:'Why It Matters', p:'Once you see money as a tool rather than a scoreboard, you can start using it deliberately — to buy time, reduce stress, and build options — instead of chasing it emotionally.'},
+    {h:'Remember This', list:['Money is a tool, not a goal in itself.','Its three jobs: exchange, store value, measure value.','Scarcity gives money (and time) their value.']}
+   ],
+   scenario:'A friend says "money isn\'t important, only what you do with it matters." How would you respond using what you just learned?',
+   quiz:[
+    {type:'mc', q:'Which of these is NOT one of the three core functions of money?', options:['Medium of exchange','Store of value','Source of happiness','Unit of account'], correct:2, explain:'Money enables exchange, storage of value, and measurement — happiness is a byproduct, not a function.'},
+    {type:'tf', q:'Money\'s main original purpose was to replace inefficient bartering.', correct:true, explain:'Correct — barter requires a "double coincidence of wants," which money solves.'},
+    {type:'scenario', q:'You have $50. Explain in your own words how holding onto it (rather than spending immediately) uses money\'s "store of value" function.', sample:'Because you can keep the $50 and it will still represent roughly the same purchasing power later, letting you spend it whenever you choose.'},
+    {type:'mc', q:'What best describes "unit of account"?', options:['Using money to measure and compare the value of things','Money kept in a bank account','A tax on money','A type of currency exchange'], correct:0, explain:'Unit of account means using money as a common scale to compare prices and value.'}
+   ]},
+  {id:'m2', title:'Income vs Wealth', time:9, diff:'Beginner',
+   sections:[
+    {h:'The Idea', p:'Income is a flow — money coming in over time (a salary, freelance payments). Wealth is a stock — what you actually own after subtracting what you owe (assets minus liabilities). A person can have high income and low wealth if they spend everything they earn, and low income but growing wealth if they save and invest consistently.'},
+    {h:'Assets vs Liabilities', p:'An asset puts money in your pocket over time (an investment, a rental property, a skill you can sell). A liability takes money out (loan payments, depreciating purchases). Wealth grows when you consistently convert income into assets.'},
+    {h:'Remember This', list:['Income = flow. Wealth = stock.','Wealth = assets − liabilities.','Buying assets with income is how wealth compounds.']}
+   ],
+   scenario:'Two people both earn the same salary. One buys a new car every 2 years; the other invests the same amount instead. Predict how their wealth differs after 10 years and why.',
+   quiz:[
+    {type:'mc', q:'Which statement is true?', options:['High income always means high wealth','Wealth is what remains after liabilities are subtracted from assets','Income and wealth are the same thing','Wealth only matters after retirement'], correct:1, explain:'Wealth = assets minus liabilities — income is just one way to build it.'},
+    {type:'tf', q:'A car loan payment is generally considered a liability, not an asset.', correct:true, explain:'A depreciating asset with a monthly payment is a liability from a wealth-building perspective.'},
+    {type:'short', q:'Name one example of an asset and one example of a liability from your own life.'},
+    {type:'mc', q:'What is the fastest way most people actually build wealth over time?', options:['Winning the lottery','Consistently converting income into appreciating assets','Spending all income immediately','Avoiding all financial risk'], correct:1, explain:'Consistency compounds — small, regular investment beats one-time windfalls for most people.'}
+   ]},
+  {id:'m3', title:'The Power of Compound Growth', time:10, diff:'Beginner',
+   sections:[
+    {h:'The Idea', p:'Compound growth means your returns start earning their own returns. $1,000 growing at 10% a year is $1,100 after year one — but by year two you\'re earning 10% on $1,100, not just the original $1,000. Over long periods this creates exponential, not linear, growth.'},
+    {h:'Time Is the Real Lever', p:'The biggest variable in compounding isn\'t the amount you start with — it\'s time. Someone who invests smaller amounts starting at 20 will typically outgrow someone who invests much more starting at 35, simply because they gave growth more years to work.'},
+    {h:'Remember This', list:['Compounding = returns earning returns.','Time matters more than the initial amount.','Starting early beats starting big.']}
+   ],
+   scenario:'You have $100 to invest today. Explain why waiting 5 years to start "because you want a bigger amount first" could actually cost you money.',
+   quiz:[
+    {type:'mc', q:'Compounding means:', options:['Earning interest only on your original deposit','Earning returns on both your original amount and previous returns','A fixed one-time bonus','A type of bank fee'], correct:1, explain:'Compounding is growth on growth — that\'s what makes it exponential.'},
+    {type:'tf', q:'Starting to invest earlier is generally more powerful than investing a larger amount later.', correct:true, explain:'Correct — time in the market is one of the strongest levers in compound growth.'},
+    {type:'scenario', q:'What would you do if you had $500 sitting idle: invest it now, or wait a year to save more first? Justify your answer.'},
+    {type:'mc', q:'"Knowledge compounds too" (a MASTERy principle) most closely means:', options:['You should only study once','Consistent small learning builds outsized ability over time','Knowledge has no real value','You should memorize facts quickly'], correct:1, explain:'Like money, small consistent deposits of learning compound into major capability over time.'}
+   ]}
+ ],
+ challenges:[
+  {title:'Track every expense you make today.', desc:'Write down everything you spend, down to the smallest purchase. Awareness is the first step to control.'},
+  {title:'Calculate your personal net worth.', desc:'List everything you own (assets) and everything you owe (liabilities). Subtract to find your current wealth snapshot.'},
+  {title:'Identify one liability you could convert into an asset.', desc:'Find one recurring expense and brainstorm how that money could instead build something that pays you back.'}
+ ]},
+
+{id:'sales', name:'Sales', icon:'💵', color:'#c9a15a', tagline:'Persuasion, negotiation & closing',
+ lessons:[
+  {id:'s1', title:'What Sales Really Is', time:7, diff:'Beginner',
+   sections:[
+    {h:'The Idea', p:'Sales isn\'t manipulation — it\'s helping someone solve a real problem, and being paid fairly for that help. The best salespeople are essentially skilled matchmakers between a problem and a solution. If there\'s no real problem being solved, it isn\'t sales, it\'s pressure.'},
+    {h:'Why It Matters', p:'Every relationship, job interview, and pitch involves some form of selling — of an idea, of yourself, of a product. Reframing sales as service removes the ick factor and makes you far more effective at it.'},
+    {h:'Remember This', list:['Sales = solving a problem for fair value.','Ethical persuasion respects the other person\'s interests.','If you wouldn\'t buy it yourself, don\'t sell it.']}
+   ],
+   scenario:'A friend says "I hate sales, it feels sleazy." Explain, in your own words, the difference between selling and manipulating.',
+   quiz:[
+    {type:'mc', q:'Which best defines ethical selling?', options:['Convincing anyone to buy anything','Matching a real problem with a real solution for fair value','Applying maximum pressure until they say yes','Hiding the downsides of a product'], correct:1, explain:'Ethical sales is about genuine fit and fair value — not pressure.'},
+    {type:'tf', q:'If a product doesn\'t actually solve the customer\'s problem, selling it anyway is still good salesmanship.', correct:false, explain:'That crosses from sales into manipulation — it damages trust and isn\'t sustainable.'},
+    {type:'short', q:'Describe a time someone "sold" you on an idea, product, or plan without it feeling sleazy. What made it feel fair?'},
+    {type:'mc', q:'A skilled salesperson is best thought of as a:', options:['Pressure applier','Problem-solution matchmaker','Talker who never listens','Someone who hides information'], correct:1, explain:'Great salespeople connect real needs to real solutions.'}
+   ]},
+  {id:'s2', title:'Understanding the Customer', time:8, diff:'Beginner',
+   sections:[
+    {h:'The Idea', p:'People rarely buy based on pure logic — they buy to solve a felt problem, relieve a fear, or move toward a desire. Before you can sell effectively, you have to genuinely understand what\'s going on for the other person: what they need, what they\'re afraid of, and what they actually value.'},
+    {h:'Ask Before You Tell', p:'Amateurs pitch first and ask questions later, if at all. Professionals ask thoughtful questions first, so their pitch is precisely aimed at what the person actually cares about.'},
+    {h:'Remember This', list:['People buy to solve problems or relieve emotions.','Ask before you pitch.','Listen for what they value, not just what they say.']}
+   ],
+   scenario:'You\'re trying to convince a small business owner to try your web design service. What are three questions you\'d ask before pitching anything?',
+   quiz:[
+    {type:'mc', q:'Before pitching, a skilled salesperson should first:', options:['Talk about all the product features','Ask questions to understand the customer\'s real need','List the price immediately','Avoid eye contact'], correct:1, explain:'Understanding comes before persuasion — question first, pitch second.'},
+    {type:'tf', q:'Most buying decisions are made on pure logic alone.', correct:false, explain:'Emotion and felt need usually drive the decision; logic is often used to justify it afterward.'},
+    {type:'scenario', q:'A customer says "I\'m not sure I need this." What question would you ask to understand what\'s really behind that hesitation?'},
+    {type:'mc', q:'"Customer psychology" in sales mainly refers to:', options:['Diagnosing mental disorders','Understanding motivations, fears and desires that drive decisions','Manipulating someone against their will','Ignoring what the customer says'], correct:1, explain:'It means understanding what genuinely drives a person\'s decisions — ethically.'}
+   ]},
+  {id:'s3', title:'Handling Objections', time:9, diff:'Beginner',
+   sections:[
+    {h:'The Idea', p:'An objection ("it\'s too expensive," "I need to think about it") is not rejection — it\'s information. It tells you exactly what\'s standing between the person and a yes. Skilled salespeople treat objections as a map, not a wall.'},
+    {h:'Feel, Felt, Found', p:'A classic, respectful framework: acknowledge how they feel, mention that others have felt the same, then share what those people found once they moved forward. It validates the concern instead of dismissing it.'},
+    {h:'Remember This', list:['Objections reveal real concerns — don\'t fear them.','Acknowledge before you respond.','Never argue the customer into submission.']}
+   ],
+   scenario:'A potential client says "I can build a website myself for free." How would you respond respectfully, using what you learned about objections?',
+   quiz:[
+    {type:'mc', q:'An objection during a sale is best understood as:', options:['A rejection to walk away from','Useful information about a real concern','A sign the customer is lying','Something to argue against forcefully'], correct:1, explain:'Objections tell you exactly what needs addressing — treat them as data.'},
+    {type:'tf', q:'The "Feel, Felt, Found" framework starts by dismissing the customer\'s concern.', correct:false, explain:'It starts by acknowledging the feeling — dismissing it would break trust immediately.'},
+    {type:'short', q:'Write a short "feel, felt, found" response to the objection: "This seems too expensive."'},
+    {type:'mc', q:'Which response best follows up after an objection is resolved?', options:['Say nothing and move on quickly','Confirm understanding and gently check where they stand now','Repeat the original pitch word for word','Offer a discount immediately no matter what'], correct:1, explain:'Checking in confirms the objection is actually resolved before moving forward.'}
+   ]}
+ ],
+ challenges:[
+  {title:'Try negotiating a purchase respectfully.', desc:'Next time you buy something with a flexible price, practice asking for a better deal — politely and confidently.'},
+  {title:'Practice a "feel, felt, found" response.', desc:'Write out how you\'d respond to a real objection you\'ve heard about something you offer or believe in.'},
+  {title:'Have one sales conversation focused only on questions.', desc:'In your next relevant conversation, ask at least 5 genuine questions before saying anything persuasive.'}
+ ]},
+
+{id:'communication', name:'Communication', icon:'🗣️', color:'#b6a8d1', tagline:'Clarity, listening & influence',
+ lessons:[
+  {id:'c1', title:'Active Listening', time:7, diff:'Beginner',
+   sections:[
+    {h:'The Idea', p:'Most people listen to reply, not to understand — they\'re already forming their next sentence while the other person is still talking. Active listening means fully focusing on the speaker, reflecting back what you heard, and only then responding.'},
+    {h:'The Skill', p:'Try paraphrasing: "So what I\'m hearing is..." This single habit builds trust faster than almost anything else you can say, because it proves you were actually paying attention.'},
+    {h:'Remember This', list:['Listen to understand, not to reply.','Paraphrase before responding.','Silence is allowed — you don\'t have to fill every gap.']}
+   ],
+   scenario:'A friend vents about a hard day. Write out what a purely active-listening response (not advice-giving) would sound like.',
+   quiz:[
+    {type:'mc', q:'Active listening primarily means:', options:['Waiting for your turn to talk','Fully focusing and reflecting back what you heard','Interrupting to show interest','Giving advice immediately'], correct:1, explain:'It\'s about fully receiving the message first, before responding.'},
+    {type:'tf', q:'Paraphrasing what someone said back to them is a sign of poor listening.', correct:false, explain:'It\'s actually one of the clearest signals of good listening.'},
+    {type:'short', q:'Describe a recent conversation where you were thinking about your reply instead of truly listening. What would you do differently now?'},
+    {type:'mc', q:'Which is a good active-listening phrase?', options:['"You\'re wrong about that."','"So what I\'m hearing is..."','"Anyway, back to me."','"That reminds me of my story."'], correct:1, explain:'This phrase reflects understanding back to the speaker.'}
+   ]},
+  {id:'c2', title:'Speaking with Clarity', time:8, diff:'Beginner',
+   sections:[
+    {h:'The Idea', p:'Clear speaking starts with clear thinking. Before you talk, know your one main point. Rambling usually means the idea wasn\'t fully formed yet, not that the listener is impatient.'},
+    {h:'Structure', p:'A simple structure — point, reason, example, point again — keeps you organized and keeps the listener with you, especially under pressure or in important conversations.'},
+    {h:'Remember This', list:['Know your one main point before you speak.','Use structure: point → reason → example → point.','Cut filler words; silence beats "um."']}
+   ],
+   scenario:'You have 30 seconds to explain what you\'re working on right now to someone new. Write it out using the point-reason-example structure.',
+   quiz:[
+    {type:'mc', q:'Clear speaking mainly starts with:', options:['Speaking loudly','Clear thinking before you speak','Using big words','Talking fast'], correct:1, explain:'Confused thinking almost always shows up as confused speech.'},
+    {type:'tf', q:'A good structure for explaining an idea is: point, reason, example, point again.', correct:true, explain:'This structure keeps both speaker and listener anchored to the main idea.'},
+    {type:'scenario', q:'You\'re nervous before an important conversation and tend to ramble. What\'s one thing you could do beforehand to speak more clearly?'},
+    {type:'mc', q:'Filler words like "um" mainly happen because:', options:['The speaker is dishonest','The next thought isn\'t fully formed yet','The listener isn\'t paying attention','English is a hard language'], correct:1, explain:'Fillers often fill the gap while a thought is still forming — pausing works better.'}
+   ]},
+  {id:'c3', title:'Reading the Room', time:8, diff:'Beginner',
+   sections:[
+    {h:'The Idea', p:'Words are only part of communication. Tone, body language, pacing, and context often say more than the words themselves. Reading the room means noticing these signals and adjusting how you communicate in response.'},
+    {h:'Practical Signals', p:'Crossed arms, short answers, or a change in tone can all signal discomfort, even when the words say "I\'m fine." Noticing this early lets you adjust before a conversation goes wrong.'},
+    {h:'Remember This', list:['Words are one channel — tone and body language are others.','Notice mismatches between words and body language.','Adjust your approach based on what you observe, not just what you hear.']}
+   ],
+   scenario:'You\'re presenting an idea and notice the room go quiet with arms crossed. What would you do in the moment?',
+   quiz:[
+    {type:'mc', q:'"Reading the room" mainly means:', options:['Reading printed materials in a meeting','Noticing tone and body language beyond just words','Speaking as loudly as possible','Ignoring nonverbal cues'], correct:1, explain:'It\'s about picking up on the full picture, not just the literal words.'},
+    {type:'tf', q:'Body language can sometimes contradict what someone is saying out loud.', correct:true, explain:'This mismatch is often the most useful signal to notice.'},
+    {type:'short', q:'Describe a time you noticed someone\'s body language didn\'t match their words. What did you do?'},
+    {type:'mc', q:'If you notice the room has gone quiet and closed-off during your pitch, the best move is usually to:', options:['Talk faster to finish quickly','Pause and check in with the room','Ignore it and continue exactly as planned','Raise your voice'], correct:1, explain:'Pausing to check in shows awareness and often re-opens the conversation.'}
+   ]}
+ ],
+ challenges:[
+  {title:'Have a conversation focused only on listening.', desc:'Pick one conversation today and consciously focus on understanding rather than waiting to respond.'},
+  {title:'Explain a complex idea in 30 seconds.', desc:'Practice compressing something you know well into a tight, structured 30-second explanation.'},
+  {title:'Notice body language in 3 conversations today.', desc:'Pay deliberate attention to tone and body language, and note what you observed.'}
+ ]},
+
+{id:'business', name:'Business', icon:'🏢', color:'#8fb0c9', tagline:'Value, models & operations',
+ lessons:[
+  {id:'b1', title:'What a Business Actually Does', time:8, diff:'Beginner',
+   sections:[
+    {h:'The Idea', p:'Strip away the jargon and a business is simple: it solves a real problem for people, and gets paid enough to cover its costs and make a profit. If nothing is being solved, there\'s no real business — just activity.'},
+    {h:'The Exchange', p:'Every transaction is a value exchange: the customer believes what they\'re getting is worth more to them than the money they\'re giving up. Businesses that lose sight of this exchange usually struggle.'},
+    {h:'Remember This', list:['A business solves a real problem for payment.','Value exchange must feel fair to the customer.','No real problem solved = no real business.']}
+   ],
+   scenario:'Think of a business you use often. What specific problem does it solve for you, and why do you feel the price is worth it?',
+   quiz:[
+    {type:'mc', q:'At its core, a business exists to:', options:['Make its founder famous','Solve a real problem for payment','Look impressive on paper','Hire as many people as possible'], correct:1, explain:'Solving a genuine problem, sustainably, is the foundation of a real business.'},
+    {type:'tf', q:'A transaction only happens when the customer believes they\'re getting fair value.', correct:true, explain:'People generally won\'t pay unless they perceive the value as worth the cost.'},
+    {type:'short', q:'Describe a problem in your daily life that nobody has solved well yet.'},
+    {type:'mc', q:'Which is a sign a business has lost sight of the value exchange?', options:['Customers keep returning','Customers feel overcharged for what they get','Prices match perceived value','Customers refer their friends'], correct:1, explain:'Feeling overcharged means the exchange no longer feels fair.'}
+   ]},
+  {id:'b2', title:'Finding Real Problems', time:9, diff:'Beginner',
+   sections:[
+    {h:'The Idea', p:'The best businesses start from an observed, specific problem — not a guess. Talking directly to potential customers reveals far more than assumptions ever will. Founders who skip this step often build something nobody actually wants.'},
+    {h:'How to Look', p:'Watch what people complain about, what they work around with clumsy fixes, and what they\'d happily pay to never deal with again. Those frustrations are the raw material of real opportunities.'},
+    {h:'Remember This', list:['Talk to real people before building anything.','Complaints and workarounds reveal opportunity.','Validate the problem before you validate the solution.']}
+   ],
+   scenario:'Pick three people around you. What is one frustration each of them has mentioned recently that nobody has solved for them?',
+   quiz:[
+    {type:'mc', q:'The strongest source of a real business idea is usually:', options:['A guess made alone in your room','Directly observed problems people actually have','Copying a competitor exactly','A random idea with no research'], correct:1, explain:'Grounded, observed problems are far more reliable than assumptions.'},
+    {type:'tf', q:'Talking to potential customers before building something is generally a waste of time.', correct:false, explain:'It\'s one of the highest-value steps — it prevents building something nobody wants.'},
+    {type:'scenario', q:'You want to start a small business but aren\'t sure what problem to solve. What are two ways you could research real problems this week?'},
+    {type:'mc', q:'A "workaround" people use is often a signal that:', options:['No real problem exists','There\'s an underserved need worth solving','The market is already saturated','People are being lazy'], correct:1, explain:'Workarounds show people care enough about a problem to invent a clumsy fix — that\'s opportunity.'}
+   ]},
+  {id:'b3', title:'The Value Proposition', time:9, diff:'Beginner',
+   sections:[
+    {h:'The Idea', p:'A value proposition answers one question clearly: why should someone choose you over doing nothing, or over a competitor? It\'s not a list of features — it\'s the specific outcome someone gets.'},
+    {h:'Clarity Over Cleverness', p:'The strongest value propositions are simple and specific: "verified student housing without the scam risk" beats vague language like "revolutionizing the housing experience."'},
+    {h:'Remember This', list:['A value proposition is the specific reason to choose you.','Features aren\'t the same as value — outcomes are.','Clear beats clever, every time.']}
+   ],
+   scenario:'Write a one-sentence value proposition for something you\'re working on (or would like to build).',
+   quiz:[
+    {type:'mc', q:'A value proposition should mainly communicate:', options:['A long list of every feature','The specific outcome or benefit a customer gets','How the founder feels about the idea','Technical implementation details'], correct:1, explain:'It\'s about the outcome for the customer, stated clearly.'},
+    {type:'tf', q:'Vague, inspirational language usually makes a stronger value proposition than specific, concrete language.', correct:false, explain:'Specific and concrete almost always outperforms vague and inspirational.'},
+    {type:'short', q:'Rewrite this vague pitch to be more specific: "We help people live better lives."'},
+    {type:'mc', q:'Which of these is the clearest value proposition?', options:['"Changing the game forever"','"Verified off-campus housing for students, without the scam risk"','"The best app ever made"','"Innovative solutions for modern problems"'], correct:1, explain:'It names exactly who it\'s for and exactly what problem it removes.'}
+   ]}
+ ],
+ challenges:[
+  {title:'Identify three problems people around you experience.', desc:'Talk to three people and note down real frustrations they mention — don\'t suggest solutions yet, just listen.'},
+  {title:'Write a one-sentence value proposition.', desc:'For an idea, product, or service you care about, write a single clear sentence describing its value.'},
+  {title:'Research one competitor closely.', desc:'Pick a business similar to an idea you have and study what they do well and where they fall short.'}
+ ]},
+
+{id:'leadership', name:'Leadership', icon:'👑', color:'#e0c67f', tagline:'Self-mastery & influence',
+ lessons:[
+  {id:'l1', title:'Leading Yourself First', time:8, diff:'Beginner',
+   sections:[
+    {h:'The Idea', p:'Before you can lead others, you have to be able to lead yourself — keep your own commitments, manage your own emotions, and follow through even when nobody\'s watching. Self-leadership is the foundation everything else is built on.'},
+    {h:'Accountability', p:'True accountability means owning outcomes, including the uncomfortable ones, without waiting for someone else to assign blame. It\'s a habit you build in private long before anyone sees it in public.'},
+    {h:'Remember This', list:['Leadership starts with leading yourself.','Keep commitments even when no one is watching.','Accountability is owning outcomes, not assigning blame.']}
+   ],
+   scenario:'Describe a recent commitment you made to yourself. Did you follow through? What does that reveal?',
+   quiz:[
+    {type:'mc', q:'Self-leadership is best described as:', options:['Being in charge of a team','Managing your own commitments and emotions first','Avoiding all responsibility','Only leading when convenient'], correct:1, explain:'Leading others reliably starts with being able to lead yourself.'},
+    {type:'tf', q:'Real accountability means owning outcomes even when no one is watching.', correct:true, explain:'That\'s exactly what separates real accountability from performative accountability.'},
+    {type:'short', q:'Name one small commitment to yourself you can keep this week, and how you\'ll know you kept it.'},
+    {type:'mc', q:'Which best reflects strong self-leadership?', options:['Blaming external circumstances for missed goals','Following through on private commitments consistently','Waiting for motivation before acting','Only working hard when supervised'], correct:1, explain:'Consistency in private commitments is a core marker of self-leadership.'}
+   ]},
+  {id:'l2', title:'Decisions Under Uncertainty', time:9, diff:'Beginner',
+   sections:[
+    {h:'The Idea', p:'Leaders rarely get to decide with complete information. Waiting for total certainty often means missing the window entirely. A useful skill is deciding well with 70% of the information, and adjusting as new information arrives.'},
+    {h:'A Simple Framework', p:'Ask: what\'s the worst realistic outcome, can I recover from it, and what does inaction cost me? This turns a scary decision into a manageable, structured one.'},
+    {h:'Remember This', list:['Perfect information rarely exists — decide with enough.','Consider the worst realistic case, not the worst imaginable one.','Inaction has a cost too.']}
+   ],
+   scenario:'You\'re facing a decision with incomplete information. Walk through the worst-realistic-case framework for it.',
+   quiz:[
+    {type:'mc', q:'Waiting for 100% certainty before deciding usually results in:', options:['Perfect decisions every time','Missed windows and opportunity cost','No risk at all','Faster decision-making'], correct:1, explain:'Certainty rarely fully arrives — waiting for it often costs more than acting on good-enough information.'},
+    {type:'tf', q:'Considering "what\'s the worst realistic outcome" is a useful decision-making tool.', correct:true, explain:'It grounds fear in reality rather than worst-case imagination.'},
+    {type:'scenario', q:'Describe a real decision you\'re currently putting off. What\'s the actual cost of continuing to wait?'},
+    {type:'mc', q:'A key question missing decision-makers often forget to ask is:', options:['What does inaction cost me?','What would look best on paper?','What would avoid all criticism?','What is the easiest option?'], correct:0, explain:'Inaction is a decision too, and it has real costs that are easy to overlook.'}
+   ]},
+  {id:'l3', title:'Vision & Influence', time:9, diff:'Beginner',
+   sections:[
+    {h:'The Idea', p:'Vision is the ability to paint a clear, compelling picture of a future state — one people can actually see and want to move toward. Influence is getting others to genuinely want to move there with you, not just comply.'},
+    {h:'Painting the Picture', p:'Specific, vivid language moves people more than abstract goals. "A campus where no student gets scammed finding housing" is more compelling than "improving the housing market."'},
+    {h:'Remember This', list:['Vision is a specific, vivid future — not a vague goal.','Influence is earned through trust, not authority alone.','People follow clarity and conviction.']}
+   ],
+   scenario:'Write a one-paragraph vision statement for something you care about, using specific and vivid language.',
+   quiz:[
+    {type:'mc', q:'A strong vision is best described as:', options:['A vague, inspirational slogan','A specific, vivid picture of a desired future','A list of quarterly targets','A rule everyone must follow'], correct:1, explain:'Specificity makes a vision something people can actually picture and want.'},
+    {type:'tf', q:'Influence based purely on formal authority is the same as influence built on trust.', correct:false, explain:'Authority can force compliance; trust earns genuine buy-in — they\'re not the same thing.'},
+    {type:'short', q:'Describe a leader (in your life or publicly known) whose vision genuinely moved you. What made it compelling?'},
+    {type:'mc', q:'Which phrase demonstrates a more compelling vision?', options:['"We want to improve things"','"A campus where no student gets scammed finding housing"','"We aim to be a leader in our space"','"Our goal is growth"'], correct:1, explain:'It\'s specific, vivid, and lets people picture the actual outcome.'}
+   ]}
+ ],
+ challenges:[
+  {title:'Take responsibility for organizing something.', desc:'Volunteer to lead or organize a task, event, or project this week, even a small one.'},
+  {title:'Make one decision you\'ve been avoiding.', desc:'Use the worst-realistic-case framework to finally decide on something you\'ve been putting off.'},
+  {title:'Write a vision statement for your own life or a project.', desc:'Draft a short, vivid paragraph describing where you want to be, specific enough that you could picture it.'}
+ ]},
+
+{id:'trading', name:'Trading', icon:'📈', color:'#c98f8f', tagline:'Market structure & risk discipline',
+ lessons:[
+  {id:'t1', title:'Market Structure Basics', time:10, diff:'Beginner',
+   sections:[
+    {h:'The Idea', p:'Price moves in swings of higher highs/higher lows (uptrend) or lower highs/lower lows (downtrend). A Break of Structure (BOS) confirms the current trend continuing; a Market Structure Shift (MSS) signals the trend may be reversing.'},
+    {h:'Why It Matters', p:'Reading structure gives you a map of what the market is currently doing, rather than reacting emotionally to every candle. It\'s the foundation everything else in technical analysis builds on.'},
+    {h:'Remember This', list:['Uptrend = higher highs, higher lows.','BOS confirms trend continuation.','MSS signals a possible reversal.']}
+   ],
+   scenario:'Explain, in your own words, the difference between a BOS and an MSS to someone new to trading.',
+   quiz:[
+    {type:'mc', q:'A Break of Structure (BOS) typically signals:', options:['A trend reversal','Continuation of the current trend','A guaranteed profit','The market closing'], correct:1, explain:'BOS confirms the existing trend is continuing.'},
+    {type:'tf', q:'An uptrend is defined by a pattern of higher highs and higher lows.', correct:true, explain:'Correct — that pattern is the textbook definition of an uptrend.'},
+    {type:'short', q:'Describe what a Market Structure Shift (MSS) suggests about a trend.'},
+    {type:'mc', q:'Reading market structure is mainly useful for:', options:['Guaranteeing a winning trade','Understanding the current state and possible direction of price','Avoiding all losses','Predicting news events'], correct:1, explain:'It\'s a framework for understanding price behavior — not a guarantee.'}
+   ]},
+  {id:'t2', title:'Liquidity Concepts', time:10, diff:'Beginner',
+   sections:[
+    {h:'The Idea', p:'Liquidity refers to pools of pending orders that sit above old highs (Buy-Side Liquidity, BSL) and below old lows (Sell-Side Liquidity, SSL). Large market participants often need this liquidity to fill their orders, which can cause price to "sweep" these levels before reversing.'},
+    {h:'Why It Matters', p:'Understanding liquidity helps explain why price sometimes spikes just past an obvious level before reversing — it\'s often not random, it\'s functional to how markets fill large orders.'},
+    {h:'Remember This', list:['BSL sits above old highs, SSL sits below old lows.','A liquidity sweep can precede a reversal.','This is a framework for probability, not certainty.']}
+   ],
+   scenario:'Explain why price might spike above an obvious resistance level and then reverse, using the concept of liquidity.',
+   quiz:[
+    {type:'mc', q:'Buy-Side Liquidity (BSL) is generally found:', options:['Below old lows','Above old highs','In the middle of a range','Nowhere specific'], correct:1, explain:'BSL sits above old highs where buy-stop orders tend to cluster.'},
+    {type:'tf', q:'A liquidity sweep guarantees the market will reverse immediately after.', correct:false, explain:'It increases probability in this framework, but nothing in trading is guaranteed.'},
+    {type:'short', q:'In your own words, explain what a "liquidity sweep" is.'},
+    {type:'mc', q:'Why might large institutions need to "sweep" liquidity?', options:['To fill large orders that need matching counter-orders','To manipulate for fun','Because it is required by law','To close the market'], correct:0, explain:'Big positions often need the liquidity resting at these levels to get filled.'}
+   ]},
+  {id:'t3', title:'Risk Management Above All', time:11, diff:'Beginner',
+   sections:[
+    {h:'The Idea', p:'No trading concept matters if you don\'t protect your capital. Professional traders think in terms of risk per trade (often 1-2% of account) and R-multiples (how much you made relative to what you risked), not in dollar amounts alone.'},
+    {h:'Psychology', p:'Most trading losses come from emotional decisions — revenge trading after a loss, moving stop losses, or over-sizing a "sure thing." A trading plan followed with discipline outperforms a better strategy followed inconsistently.'},
+    {h:'Important', p:'Trading carries real risk of loss. No setup or strategy guarantees profit, and past performance never guarantees future results. Position sizing and a trading journal are how professionals manage this risk over time.'},
+    {h:'Remember This', list:['Risk a small, fixed percentage per trade.','Think in R-multiples, not just dollars.','Discipline beats a "better" strategy followed inconsistently.']}
+   ],
+   scenario:'You just took two losing trades in a row and feel the urge to "make it back" with a bigger position. What would a disciplined trader do instead?',
+   quiz:[
+    {type:'mc', q:'A common professional guideline for risk per trade is around:', options:['50% of the account','1-2% of the account','100% of the account','There is no guideline'], correct:1, explain:'Small, consistent risk per trade protects capital over the long run.'},
+    {type:'tf', q:'Following a mediocre trading plan with discipline generally outperforms following a great plan inconsistently.', correct:true, explain:'Consistency and discipline are what actually compound results over time — this is widely reflected in trading psychology research.'},
+    {type:'scenario', q:'Describe what "revenge trading" is and why it\'s dangerous.'},
+    {type:'mc', q:'What is the primary purpose of a trading journal?', options:['To brag about wins','To track and improve decision-making over time','To guarantee future profits','To avoid taxes'], correct:1, explain:'A journal reveals patterns in your decision-making that raw win/loss numbers hide.'}
+   ]}
+ ],
+ challenges:[
+  {title:'Backtest 20 setups and record the results.', desc:'Review historical charts for a strategy you\'re studying and log what would have happened, without risking real money.'},
+  {title:'Write your personal risk management rules.', desc:'Define your max risk per trade, daily loss limit, and rules for when you will NOT trade.'},
+  {title:'Start a trading journal entry today.', desc:'If you took any trade (real or practice) recently, log the setup, reasoning, and outcome.'}
+ ]},
+
+{id:'health', name:'Health', icon:'❤️', color:'#8fc99b', tagline:'Nutrition, recovery & vitality',
+ lessons:[
+  {id:'h1', title:'Nutrition Fundamentals', time:8, diff:'Beginner',
+   sections:[
+    {h:'The Idea', p:'Most nutrition advice can be boiled down to fundamentals: eat mostly whole, minimally processed foods, get enough protein, stay hydrated, and eat until satisfied rather than stuffed. Complexity is rarely necessary for general wellbeing.'},
+    {h:'Hydration', p:'Even mild dehydration can affect energy and focus. A simple habit — a glass of water with each meal, plus more around activity — covers most people\'s needs.'},
+    {h:'A Note', p:'This is general education, not medical advice. For specific dietary needs, conditions, or concerns, talk to a qualified healthcare professional or registered dietitian.'},
+    {h:'Remember This', list:['Prioritize whole, minimally processed foods.','Protein and hydration are easy wins.','Eat until satisfied, not stuffed.']}
+   ],
+   scenario:'Look at what you ate yesterday. Identify one small, realistic change that would move it closer to "mostly whole foods."',
+   quiz:[
+    {type:'mc', q:'A simple, broadly useful nutrition principle is:', options:['Eat only one meal a week','Prioritize whole, minimally processed foods','Avoid all fat completely','Never drink water with meals'], correct:1, explain:'This simple principle covers most of what general nutrition advice comes down to.'},
+    {type:'tf', q:'Even mild dehydration can affect energy and focus.', correct:true, explain:'Correct — hydration has a noticeable effect on daily energy and concentration.'},
+    {type:'short', q:'Name one small nutrition habit you could realistically start this week.'},
+    {type:'mc', q:'This lesson is meant to be:', options:['A medical diagnosis tool','General education, not medical advice','A replacement for a doctor','A strict diet plan'], correct:1, explain:'For specific health concerns, always consult a qualified professional.'}
+   ]},
+  {id:'h2', title:'Sleep & Recovery', time:8, diff:'Beginner',
+   sections:[
+    {h:'The Idea', p:'Sleep isn\'t downtime — it\'s when your body and brain actively repair, consolidate memory, and regulate hormones. Chronic under-sleeping affects focus, mood, and decision-making far more than most people realize.'},
+    {h:'Simple Levers', p:'Consistent sleep and wake times, reduced screen exposure before bed, and a cool, dark room are some of the highest-leverage, lowest-cost improvements to sleep quality.'},
+    {h:'Remember This', list:['Sleep is active repair, not passive downtime.','Consistency matters as much as duration.','Small environment changes can meaningfully improve sleep.']}
+   ],
+   scenario:'What is one change to your evening routine that could realistically improve your sleep this week?',
+   quiz:[
+    {type:'mc', q:'During sleep, the body and brain:', options:['Shut down completely with no activity','Actively repair and consolidate memory','Only rest the eyes','Have no measurable function'], correct:1, explain:'Sleep is an active biological process, not simple inactivity.'},
+    {type:'tf', q:'Consistent sleep and wake times can be as important as total sleep duration.', correct:true, explain:'Circadian consistency plays a major role in sleep quality.'},
+    {type:'short', q:'Describe your current evening routine. What\'s one part that might be hurting your sleep quality?'},
+    {type:'mc', q:'Which is a commonly recommended, low-cost lever for better sleep?', options:['Bright screens right before bed','A cool, dark, consistent sleep environment','Irregular sleep times','Skipping sleep on weekdays'], correct:1, explain:'A cool, dark, quiet environment is one of the simplest evidence-informed levers available.'}
+   ]},
+  {id:'h3', title:'Building a Movement Habit', time:8, diff:'Beginner',
+   sections:[
+    {h:'The Idea', p:'The best exercise routine is the one you\'ll actually keep doing. Consistency at a moderate intensity beats occasional intense sessions that burn you out and get abandoned within weeks.'},
+    {h:'Start Small', p:'A realistic starting habit — even 15-20 minutes of movement most days — builds the identity of "someone who moves regularly," which matters more early on than the specific workout.'},
+    {h:'A Note', p:'This is general education. If you have any health conditions or concerns, consult a healthcare professional before starting a new exercise routine.'},
+    {h:'Remember This', list:['Consistency beats intensity, especially early on.','Start smaller than you think you need to.','Build the identity first, intensity later.']}
+   ],
+   scenario:'Design a movement session you could realistically repeat 4 times this week, and describe how you\'d feel afterward.',
+   quiz:[
+    {type:'mc', q:'For building a lasting movement habit, the priority should usually be:', options:['Maximum intensity from day one','Consistency at a sustainable intensity','Skipping rest entirely','Comparing yourself to elite athletes'], correct:1, explain:'Sustainable consistency builds the habit that intensity alone often burns out.'},
+    {type:'tf', q:'Starting with a smaller, easier routine can make a habit more likely to stick.', correct:true, explain:'Lower initial friction tends to increase long-term adherence.'},
+    {type:'short', q:'What is one form of movement you actually enjoy, or could realistically enjoy?'},
+    {type:'mc', q:'This lesson recommends that before starting a new routine with health concerns, you should:', options:['Ignore any concerns and push through','Consult a healthcare professional first','Avoid all movement permanently','Only trust social media advice'], correct:1, explain:'Professional guidance matters especially when health conditions are involved.'}
+   ]}
+ ],
+ challenges:[
+  {title:'Complete a realistic movement session and record how you feel afterward.', desc:'Do 15-30 minutes of any movement you enjoy, then journal how your body and mood felt afterward.'},
+  {title:'Track your water intake for one full day.', desc:'Note how much water you actually drink today versus what you assumed.'},
+  {title:'Set a consistent bedtime for the next 3 nights.', desc:'Pick a realistic bedtime and try to hit it three nights in a row, noting how you feel each morning.'}
+ ]},
+
+{id:'discipline', name:'Discipline', icon:'🔥', color:'#e08f6f', tagline:'Habits, focus & consistency',
+ lessons:[
+  {id:'d1', title:'The Habit Loop', time:8, diff:'Beginner',
+   sections:[
+    {h:'The Idea', p:'Every habit follows a loop: a cue triggers a routine, which delivers a reward, which reinforces the cue-routine connection next time. Understanding this loop is the key to both building good habits and breaking bad ones.'},
+    {h:'Applying It', p:'To build a habit, make the cue obvious and the reward satisfying. To break one, disrupt any part of the loop — remove the cue, change the routine, or reduce the reward.'},
+    {h:'Remember This', list:['Habit loop: cue → routine → reward.','Build habits by making cues obvious and rewards satisfying.','Break habits by disrupting any single part of the loop.']}
+   ],
+   scenario:'Pick one habit (good or bad) you have. Break it down into its cue, routine, and reward.',
+   quiz:[
+    {type:'mc', q:'The habit loop consists of:', options:['Cue, routine, reward','Wish, want, wait','Start, middle, end','Plan, execute, forget'], correct:0, explain:'Cue triggers routine, which delivers reward — that\'s the core loop.'},
+    {type:'tf', q:'Disrupting any single part of the habit loop can help break an unwanted habit.', correct:true, explain:'You don\'t need to disrupt the whole loop — breaking one link is often enough.'},
+    {type:'short', q:'Name one bad habit\'s cue, routine, and reward from your own life.'},
+    {type:'mc', q:'To build a new good habit, it helps most to:', options:['Hide the cue entirely','Make the cue obvious and the reward satisfying','Remove all rewards','Avoid any routine at all'], correct:1, explain:'A visible cue and a satisfying reward make a new habit far more likely to stick.'}
+   ]},
+  {id:'d2', title:'Environment Design', time:8, diff:'Beginner',
+   sections:[
+    {h:'The Idea', p:'Willpower is a limited, unreliable resource. Designing your environment so good choices are easy and bad choices are hard is far more reliable than relying on motivation alone.'},
+    {h:'Practical Moves', p:'Put your phone in another room while working. Keep healthy snacks visible and junk food out of sight. Lay out gym clothes the night before. Small friction changes compound into large behavior changes.'},
+    {h:'Remember This', list:['Willpower is unreliable — design is more dependable.','Reduce friction for good habits.','Increase friction for habits you want less of.']}
+   ],
+   scenario:'Identify one change to your physical environment that would make a good habit easier or a bad habit harder.',
+   quiz:[
+    {type:'mc', q:'Environment design works by:', options:['Relying purely on willpower','Making good choices easier and bad choices harder','Ignoring your surroundings entirely','Removing all choices'], correct:1, explain:'Reducing friction for good behavior (and adding it for bad behavior) works better than willpower alone.'},
+    {type:'tf', q:'Willpower is generally considered a limited and unreliable resource to depend on long-term.', correct:true, explain:'This is why systems and environment design tend to outperform relying on motivation.'},
+    {type:'scenario', q:'What is one piece of "friction" you could add to reduce a habit you want less of (e.g. phone use before bed)?'},
+    {type:'mc', q:'Laying out gym clothes the night before is an example of:', options:['Increasing friction for a good habit','Reducing friction for a good habit','Ignoring the habit loop','A bad habit'], correct:1, explain:'It removes a small barrier, making the good behavior more likely the next morning.'}
+   ]},
+  {id:'d3', title:'Delayed Gratification', time:9, diff:'Beginner',
+   sections:[
+    {h:'The Idea', p:'The ability to choose a larger future reward over a smaller immediate one is one of the strongest predictors of long-term success across many life domains. It\'s a skill, not a fixed trait — and it can be trained.'},
+    {h:'Training It', p:'Start small: delay a minor gratification (checking your phone, a snack) by just a few minutes, and notice the urge pass. This builds the "muscle" for bigger delayed-gratification decisions later.'},
+    {h:'Remember This', list:['Delayed gratification is trainable, not fixed.','Start with small delays to build the skill.','Long-term thinking compounds, just like money and knowledge.']}
+   ],
+   scenario:'Describe a recent moment where you chose short-term comfort over a longer-term goal. What would the delayed-gratification version have looked like?',
+   quiz:[
+    {type:'mc', q:'Delayed gratification is best described as:', options:['A fixed trait you either have or don\'t','A trainable skill of choosing bigger future rewards over smaller immediate ones','Avoiding all rewards forever','Only relevant to children'], correct:1, explain:'It\'s a skill that can be deliberately trained through small, repeated practice.'},
+    {type:'tf', q:'Starting with very small delays is a reasonable way to train delayed gratification.', correct:true, explain:'Small wins build the capacity for bigger ones over time.'},
+    {type:'short', q:'Name one small immediate gratification you could practice delaying this week.'},
+    {type:'mc', q:'Which best reflects "your future self is built through today\'s decisions" (a MASTERy principle)?', options:['Only big decisions matter','Small daily choices accumulate into who you become','The future is entirely random','Past decisions don\'t matter anymore'], correct:1, explain:'Small consistent choices compound over time, just like money or knowledge.'}
+   ]}
+ ],
+ challenges:[
+  {title:'Complete a 45-minute distraction-free work session.', desc:'Put your phone away, close other tabs, and focus on one task for 45 minutes straight.'},
+  {title:'Redesign one part of your environment today.', desc:'Make one change that makes a good habit easier or a bad habit harder to do.'},
+  {title:'Practice delaying one small gratification.', desc:'Pick one small urge today (checking your phone, a snack) and delay acting on it by 10 minutes.'}
+ ]}
+];
+
+const LEVELS = [
+ {level:1, name:'Beginner', xp:0},
+ {level:2, name:'Explorer', xp:300},
+ {level:3, name:'Learner', xp:800},
+ {level:4, name:'Builder', xp:1600},
+ {level:5, name:'Practitioner', xp:2800},
+ {level:6, name:'Strategist', xp:4400},
+ {level:7, name:'Advanced', xp:6500},
+ {level:8, name:'Expert', xp:9200},
+ {level:9, name:'Master', xp:13000}
+];
+
+const ACHIEVEMENTS = [
+ {id:'streak7', icon:'🔥', name:'7-Day Streak', check:s=>s.longestStreak>=7},
+ {id:'streak30', icon:'🔥', name:'30-Day Streak', check:s=>s.longestStreak>=30},
+ {id:'lessons10', icon:'📚', name:'10 Lessons', check:s=>Object.keys(s.completedLessons).length>=10},
+ {id:'quiz100', icon:'🧠', name:'100 Quiz Questions', check:s=>s.totalQuizQuestions>=100},
+ {id:'moneyBeg', icon:'💰', name:'Money Beginner', check:s=>academyLessonsDone(s,'money')>=1},
+ {id:'tradingFound', icon:'📈', name:'Trading Foundations', check:s=>academyLessonsDone(s,'trading')>=3},
+ {id:'salesExp', icon:'💵', name:'Sales Explorer', check:s=>academyLessonsDone(s,'sales')>=1},
+ {id:'leadStart', icon:'👑', name:'Leadership Starter', check:s=>academyLessonsDone(s,'leadership')>=1},
+ {id:'discBuild', icon:'🔥', name:'Discipline Builder', check:s=>academyLessonsDone(s,'discipline')>=1},
+ {id:'firstMastery', icon:'🏆', name:'First Mastery', check:s=>ACADEMIES.some(a=>masteryPct(s,a.id)>=100)},
+ {id:'firstChallenge', icon:'🎯', name:'First Challenge', check:s=>Object.keys(s.completedChallenges).length>=1},
+ {id:'journalStart', icon:'📓', name:'First Journal Entry', check:s=>s.journal.length>=1}
+];
+
+const QUOTES = ["Knowledge compounds too.","Don't just learn it. Prove it.","Your future self is built through today's decisions.","Consistency beats intensity.","Master the skill before you scale the stakes."];
+
+/* ============ STATE ============ */
+const STORAGE_KEY = 'mastery_state_v1';
+function defaultState(){
+  return {
+    name:'Maryann',
+    xp:0,
+    completedLessons:{}, // lessonId -> true
+    quizScores:{}, // lessonId -> {score, total}
+    completedChallenges:{}, // "academy_idx" -> true
+    journal:[], // {id, date, academy, learned, surprised, unclear, apply, next}
+    lastActiveDate:null,
+    currentStreak:0,
+    longestStreak:0,
+    daysActive:[], // array of yyyy-mm-dd
+    missionDate:null,
+    missionDone:{learn:false,test:false,apply:false,discipline:false},
+    totalQuizQuestions:0,
+    seenAchievements:[],
+    dailyMinutes:30,
+    notifications:true
+  };
+}
+let state = loadState();
+function loadState(){
+  try{
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if(!raw) return defaultState();
+    const parsed = JSON.parse(raw);
+    return Object.assign(defaultState(), parsed);
+  }catch(e){ return defaultState(); }
+}
+function saveState(){
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+}
+function todayStr(){ return new Date().toISOString().slice(0,10); }
+
+function touchStreak(){
+  const today = todayStr();
+  if(state.lastActiveDate === today) return;
+  if(state.lastActiveDate){
+    const last = new Date(state.lastActiveDate);
+    const diff = Math.round((new Date(today) - last) / 86400000);
+    if(diff === 1){ state.currentStreak += 1; }
+    else if(diff > 1){ state.currentStreak = 1; }
+  } else {
+    state.currentStreak = 1;
+  }
+  state.longestStreak = Math.max(state.longestStreak, state.currentStreak);
+  state.lastActiveDate = today;
+  if(!state.daysActive.includes(today)) state.daysActive.push(today);
+  saveState();
+}
+
+function addXP(amount){
+  state.xp += amount;
+  saveState();
+  showToast('+'+amount+' XP');
+  checkAchievements();
+}
+
+function getLevel(){
+  let current = LEVELS[0];
+  for(const l of LEVELS){ if(state.xp >= l.xp) current = l; }
+  const idx = LEVELS.indexOf(current);
+  const next = LEVELS[idx+1] || null;
+  return {current, next};
+}
+
+function academyLessonsDone(s, academyId){
+  const ac = ACADEMIES.find(a=>a.id===academyId);
+  if(!ac) return 0;
+  return ac.lessons.filter(l=>s.completedLessons[l.id]).length;
+}
+
+function masteryPct(s, academyId){
+  const ac = ACADEMIES.find(a=>a.id===academyId);
+  if(!ac) return 0;
+  const totalLessons = ac.lessons.length;
+  const lessonsDone = ac.lessons.filter(l=>s.completedLessons[l.id]).length;
+  let quizScoreSum = 0, quizCount = 0;
+  ac.lessons.forEach(l=>{
+    const qs = s.quizScores[l.id];
+    if(qs){ quizScoreSum += (qs.score/qs.total); quizCount++; }
+  });
+  const avgQuiz = quizCount? quizScoreSum/quizCount : 0;
+  const challengesTotal = ac.challenges.length;
+  let challengesDone = 0;
+  ac.challenges.forEach((c,i)=>{ if(s.completedChallenges[academyId+'_'+i]) challengesDone++; });
+  const lessonComponent = (lessonsDone/totalLessons) * 45;
+  const quizComponent = avgQuiz * 35;
+  const challengeComponent = (challengesTotal? challengesDone/challengesTotal : 0) * 20;
+  return Math.round(lessonComponent + quizComponent + challengeComponent);
+}
+
+function overallMastery(s){
+  const vals = ACADEMIES.map(a=>masteryPct(s,a.id));
+  return Math.round(vals.reduce((a,b)=>a+b,0)/vals.length);
+}
+
+function ensureMission(){
+  const today = todayStr();
+  if(state.missionDate !== today){
+    state.missionDate = today;
+    state.missionDone = {learn:false,test:false,apply:false,discipline:false};
+    saveState();
+  }
+}
+
+function checkAchievements(){
+  ACHIEVEMENTS.forEach(a=>{
+    if(a.check(state) && !state.seenAchievements.includes(a.id)){
+      state.seenAchievements.push(a.id);
+      saveState();
+    }
+  });
+}
+
+function showToast(msg){
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  clearTimeout(showToast._tm);
+  showToast._tm = setTimeout(()=>t.classList.remove('show'), 1800);
+}
+
+/* ============ ROUTER ============ */
+let route = {view:'dashboard'};
+function nav(view, params={}){
+  route = {view, ...params};
+  render();
+  window.scrollTo(0,0);
+}
+
+/* ============ RENDER HELPERS ============ */
+function ringSVG(pct, size=88, stroke=8){
+  const r = (size-stroke)/2;
+  const c = 2*Math.PI*r;
+  const offset = c - (pct/100)*c;
+  return `<svg width="${size}" height="${size}" viewBox="0 0 ${size} ${size}">
+    <circle cx="${size/2}" cy="${size/2}" r="${r}" fill="none" stroke="rgba(255,255,255,0.08)" stroke-width="${stroke}"/>
+    <circle cx="${size/2}" cy="${size/2}" r="${r}" fill="none" stroke="url(#goldGrad)" stroke-width="${stroke}" stroke-linecap="round" stroke-dasharray="${c}" stroke-dashoffset="${offset}"/>
+    <defs><linearGradient id="goldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#d4af6a"/><stop offset="100%" stop-color="#f2d9a6"/>
+    </linearGradient></defs>
+  </svg>`;
+}
+
+function colorForPct(pct){
+  if(pct>=70) return 'var(--good)';
+  if(pct>=35) return 'var(--gold)';
+  return 'var(--text-faint)';
+}
+
+/* ============ VIEWS ============ */
+function viewDashboard(){
+  ensureMission();
+  const {current, next} = getLevel();
+  const overall = overallMastery(state);
+  const xpIntoLevel = state.xp - current.xp;
+  const xpForLevel = next ? next.xp - current.xp : 1;
+  const xpPct = next ? Math.min(100, Math.round((xpIntoLevel/xpForLevel)*100)) : 100;
+  const hour = new Date().getHours();
+  const greet = hour<12?'Good morning':hour<18?'Good afternoon':'Good evening';
+
+  const mission = missionForToday();
+
+  return `
+  <div class="greeting">${greet}, ${state.name} 👋</div>
+  <div class="subline">Build the mind, skills and discipline to create the life you want.</div>
+
+  <div class="mastery-card">
+    <div class="ring-wrap">${ringSVG(overall)}
+      <div class="ring-label"><div class="pct">${overall}%</div><div class="cap">Mastery</div></div>
+    </div>
+    <div class="mastery-meta">
+      <div class="m-title">Current Level</div>
+      <div class="m-sub" style="font-family:var(--serif);font-size:17px;color:var(--text);margin-bottom:4px;">Level ${current.level} — ${current.name}</div>
+      <div class="m-sub">${next? (state.xp+' / '+next.xp+' XP') : 'Max level reached'}</div>
+    </div>
+  </div>
+
+  <div class="stat-row">
+    <div class="stat-chip">
+      <div class="s-label">Streak</div>
+      <div class="s-value">🔥 ${state.currentStreak}d</div>
+    </div>
+    <div class="stat-chip">
+      <div class="s-label">Total XP</div>
+      <div class="s-value">${state.xp}</div>
+      <div class="xp-bar-track"><div class="xp-bar-fill" style="width:${xpPct}%"></div></div>
+    </div>
+  </div>
+
+  <div class="mission-card">
+    <div class="m-head">Today's Mission</div>
+    <div class="mission-item ${mission.learn.done?'done':''}" onclick="handleMissionTap('learn')">
+      <div class="m-check ${mission.learn.done?'done':''}">${mission.learn.done?'✓':''}</div>
+      <div class="m-text"><div class="m-cat">📚 Learn</div><div class="m-name">${mission.learn.label}</div></div>
+    </div>
+    <div class="mission-item ${mission.test.done?'done':''}" onclick="handleMissionTap('test')">
+      <div class="m-check ${mission.test.done?'done':''}">${mission.test.done?'✓':''}</div>
+      <div class="m-text"><div class="m-cat">🧠 Test</div><div class="m-name">${mission.test.label}</div></div>
+    </div>
+    <div class="mission-item ${mission.apply.done?'done':''}" onclick="handleMissionTap('apply')">
+      <div class="m-check ${mission.apply.done?'done':''}">${mission.apply.done?'✓':''}</div>
+      <div class="m-text"><div class="m-cat">🎯 Apply</div><div class="m-name">${mission.apply.label}</div></div>
+    </div>
+    <div class="mission-item ${mission.discipline.done?'done':''}" onclick="handleMissionTap('discipline')">
+      <div class="m-check ${mission.discipline.done?'done':''}">${mission.discipline.done?'✓':''}</div>
+      <div class="m-text"><div class="m-cat">🔥 Discipline</div><div class="m-name">${mission.discipline.label}</div></div>
+    </div>
+  </div>
+
+  ${renderNextStep()}
+
+  <div class="section-label"><h3>Your Academies</h3><span class="see-all" onclick="nav('academies')">See all</span></div>
+  <div class="academy-grid">
+    ${ACADEMIES.slice(0,4).map(a=>academyCard(a)).join('')}
+  </div>
+
+  <div class="divider-quote">"${QUOTES[new Date().getDate() % QUOTES.length]}"</div>
+  `;
+}
+
+function missionForToday(){
+  // pick a deterministic-ish "today" lesson: first incomplete lesson overall
+  let learnLesson = null;
+  for(const ac of ACADEMIES){
+    for(const l of ac.lessons){
+      if(!state.completedLessons[l.id]){ learnLesson = {ac, l}; break; }
+    }
+    if(learnLesson) break;
+  }
+  const testTarget = learnLesson ? learnLesson.l : null;
+  let applyChallenge = null;
+  outer: for(const ac of ACADEMIES){
+    for(let i=0;i<ac.challenges.length;i++){
+      if(!state.completedChallenges[ac.id+'_'+i]){ applyChallenge = {ac, idx:i, c:ac.challenges[i]}; break outer; }
+    }
+  }
+  return {
+    learn: {done: state.missionDone.learn, label: learnLesson? learnLesson.l.title : 'All lessons complete!'},
+    test: {done: state.missionDone.test, label: testTarget? 'Quick check: '+testTarget.title : '5-question quiz'},
+    apply: {done: state.missionDone.apply, label: applyChallenge? applyChallenge.c.title : 'Apply a recent lesson'},
+    discipline: {done: state.missionDone.discipline, label: (state.dailyMinutes||30)+' minutes of focused learning'},
+    _learnTarget: learnLesson, _applyTarget: applyChallenge
+  };
+}
+
+function handleMissionTap(key){
+  const mission = missionForToday();
+  if(key==='learn'){
+    if(mission._learnTarget) nav('lesson', {academyId:mission._learnTarget.ac.id, lessonId:mission._learnTarget.l.id});
+    else showToast('All lessons complete!');
+    return;
+  }
+  if(key==='test'){
+    if(mission._learnTarget) nav('lesson', {academyId:mission._learnTarget.ac.id, lessonId:mission._learnTarget.l.id, jumpQuiz:true});
+    else nav('quizcenter');
+    return;
+  }
+  if(key==='apply'){
+    if(mission._applyTarget) nav('academy', {academyId:mission._applyTarget.ac.id});
+    else nav('academies');
+    return;
+  }
+  if(key==='discipline'){
+    state.missionDone.discipline = true;
+    saveState();
+    addXP(75);
+    render();
+    return;
+  }
+}
+
+function renderNextStep(){
+  const mission = missionForToday();
+  if(mission._learnTarget){
+    return `<div class="next-step-card" onclick="nav('lesson',{academyId:'${mission._learnTarget.ac.id}',lessonId:'${mission._learnTarget.l.id}'})">
+      <div class="ns-icon">${mission._learnTarget.ac.icon}</div>
+      <div><div class="ns-label">Your Next Step</div><div class="ns-title">Complete: ${mission._learnTarget.l.title}</div></div>
+      <div class="ns-arrow">→</div>
+    </div>`;
+  }
+  return `<div class="next-step-card" onclick="nav('academies')">
+    <div class="ns-icon">🏆</div>
+    <div><div class="ns-label">Your Next Step</div><div class="ns-title">Review what you've mastered</div></div>
+    <div class="ns-arrow">→</div>
+  </div>`;
+}
+
+function academyCard(a){
+  const pct = masteryPct(state, a.id);
+  return `<div class="academy-card" onclick="nav('academy',{academyId:'${a.id}'})">
+    <span class="a-icon">${a.icon}</span>
+    <div class="a-name">${a.name}</div>
+    <div class="a-pct">${pct}% mastered</div>
+    <div class="a-bar"><div class="a-bar-fill" style="width:${pct}%;background:${a.color}"></div></div>
+  </div>`;
+}
+
+function viewAcademies(){
+  return `
+  <div class="section-label" style="margin-top:6px;"><h3>Your Academies</h3></div>
+  <div class="academy-grid">${ACADEMIES.map(a=>academyCard(a)).join('')}</div>
+  `;
+}
+
+function viewAcademy(academyId){
+  const ac = ACADEMIES.find(a=>a.id===academyId);
+  const pct = masteryPct(state, ac.id);
+  const xpEarned = ac.lessons.reduce((sum,l)=> sum + (state.completedLessons[l.id]?20:0) + (state.quizScores[l.id]? state.quizScores[l.id].score*10 : 0), 0);
+  let unlockedCount = 0;
+  return `
+  <div class="back-row"><span class="back-btn" onclick="nav('academies')">←</span><h2 style="font-size:18px;">${ac.icon} ${ac.name}</h2></div>
+  <div class="mastery-card" style="margin-top:12px;">
+    <div class="ring-wrap">${ringSVG(pct,72,7)}<div class="ring-label"><div class="pct" style="font-size:18px;">${pct}%</div><div class="cap">Mastery</div></div></div>
+    <div class="mastery-meta">
+      <div class="m-title">${ac.tagline}</div>
+      <div class="m-sub">XP earned: ${xpEarned}</div>
+    </div>
+  </div>
+
+  <div class="section-label"><h3>Roadmap</h3></div>
+  <div class="card-list">
+  ${ac.lessons.map((l,i)=>{
+    const done = state.completedLessons[l.id];
+    const locked = i>0 && !state.completedLessons[ac.lessons[i-1].id];
+    const emoji = done? '✓' : locked? '🔒':'🔓';
+    return `<div class="lesson-row ${locked?'locked':''}" onclick="${locked?'':`nav('lesson',{academyId:'${ac.id}',lessonId:'${l.id}'})`}">
+      <div class="lesson-num ${done?'complete':''}">${emoji}</div>
+      <div class="lesson-info"><div class="l-title">${l.title}</div><div class="l-meta">${l.time} min · ${l.diff}</div></div>
+    </div>`;
+  }).join('')}
+  <div class="lesson-row locked"><div class="lesson-num">🔒</div><div class="lesson-info"><div class="l-title">Final Challenge</div><div class="l-meta">Complete all lessons to unlock</div></div></div>
+  </div>
+
+  <div class="section-label"><h3>Practical Challenges</h3></div>
+  <div class="card-list">
+  ${ac.challenges.map((c,i)=>{
+    const key = ac.id+'_'+i;
+    const done = state.completedChallenges[key];
+    return `<div class="lesson-row" onclick="nav('challenge',{academyId:'${ac.id}',idx:${i}})">
+      <div class="lesson-num ${done?'complete':''}">${done?'✓':'🎯'}</div>
+      <div class="lesson-info"><div class="l-title">${c.title}</div><div class="l-meta">${done?'Completed':'Not started'}</div></div>
+    </div>`;
+  }).join('')}
+  </div>
+  `;
+}
+
+function viewChallenge(academyId, idx){
+  const ac = ACADEMIES.find(a=>a.id===academyId);
+  const c = ac.challenges[idx];
+  const key = academyId+'_'+idx;
+  const done = state.completedChallenges[key];
+  return `
+  <div class="back-row"><span class="back-btn" onclick="nav('academy',{academyId:'${ac.id}'})">←</span><h2 style="font-size:18px;">Challenge</h2></div>
+  <div class="lesson-tag" style="margin-top:14px;">${ac.icon} ${ac.name} · Practical Challenge</div>
+  <h2 style="font-size:23px; margin-bottom:14px; line-height:1.3;">${c.title}</h2>
+  <div class="content-block"><p>${c.desc}</p></div>
+  ${done ? `<div class="content-block" style="border-color:var(--good);"><p style="color:var(--good);">✓ You've completed this challenge.</p></div>`
+   : `<button class="btn btn-primary" onclick="completeChallenge('${academyId}',${idx})">Mark as Complete (+50 XP)</button>`}
+  `;
+}
+function completeChallenge(academyId, idx){
+  const key = academyId+'_'+idx;
+  if(state.completedChallenges[key]) return;
+  state.completedChallenges[key] = true;
+  state.missionDone.apply = true;
+  touchStreak();
+  saveState();
+  addXP(50);
+  nav('academy',{academyId});
+}
+
+function viewLesson(academyId, lessonId, jumpQuiz){
+  const ac = ACADEMIES.find(a=>a.id===academyId);
+  const l = ac.lessons.find(x=>x.id===lessonId);
+  if(jumpQuiz) return renderQuizFlow(ac, l, 0, [], true);
+  return `
+  <div class="back-row"><span class="back-btn" onclick="nav('academy',{academyId:'${ac.id}'})">←</span></div>
+  <div class="lesson-hero">
+    <div class="lesson-tag">${ac.icon} ${ac.name}</div>
+    <h2>${l.title}</h2>
+    <div class="lesson-meta-row"><span>⏱ ${l.time} min</span><span>📊 ${l.diff}</span></div>
+  </div>
+  ${l.sections.map(s=>`
+    <div class="content-block">
+      <h4>${s.h}</h4>
+      ${s.p?`<p>${s.p}</p>`:''}
+      ${s.list?`<ul>${s.list.map(li=>`<li>${li}</li>`).join('')}</ul>`:''}
+    </div>
+  `).join('')}
+  <div class="content-block" style="border-color:var(--gold-soft);">
+    <h4>Real-World Scenario</h4>
+    <p style="font-style:italic;">${l.scenario}</p>
+  </div>
+  <button class="btn btn-primary" onclick="nav('quiz',{academyId:'${ac.id}',lessonId:'${l.id}'})">Take Quick Check →</button>
+  `;
+}
+
+/* Quiz state (transient, not persisted mid-quiz) */
+let quizState = null;
+function viewQuiz(academyId, lessonId){
+  const ac = ACADEMIES.find(a=>a.id===academyId);
+  const l = ac.lessons.find(x=>x.id===lessonId);
+  quizState = {academyId, lessonId, idx:0, answers:[], correctCount:0, revealed:false};
+  return renderQuizStep(ac, l);
+}
+function renderQuizFlow(ac, l){ // helper used from mission jump
+  quizState = {academyId:ac.id, lessonId:l.id, idx:0, answers:[], correctCount:0, revealed:false};
+  return renderQuizStep(ac, l);
+}
+function renderQuizStep(ac, l){
+  const q = l.quiz[quizState.idx];
+  const total = l.quiz.length;
+  const progressDots = Array.from({length:total}).map((_,i)=>`<div class="dot ${i<=quizState.idx?'filled':''}"></div>`).join('');
+
+  let body = '';
+  if(q.type==='mc'){
+    body = q.options.map((opt,i)=>{
+      let cls='opt-btn';
+      if(quizState.revealed){
+        if(i===q.correct) cls+=' correct';
+        else if(i===quizState.selected) cls+=' incorrect';
+      } else if(i===quizState.selected) cls+=' selected';
+      return `<button class="${cls}" onclick="selectMC(${i})" ${quizState.revealed?'disabled':''}>${opt}</button>`;
+    }).join('');
+  } else if(q.type==='tf'){
+    body = ['True','False'].map((opt,i)=>{
+      const val = i===0;
+      let cls='opt-btn';
+      if(quizState.revealed){
+        if(val===q.correct) cls+=' correct';
+        else if(val===quizState.selected) cls+=' incorrect';
+      } else if(val===quizState.selected) cls+=' selected';
+      return `<button class="${cls}" onclick="selectTF(${val})" ${quizState.revealed?'disabled':''}>${opt}</button>`;
+    }).join('');
+  } else { // scenario / short
+    body = `<textarea class="short-answer" id="freeAnswer" placeholder="Write your answer..." ${quizState.revealed?'disabled':''}>${quizState.freeText||''}</textarea>`;
+  }
+
+  const explainBox = quizState.revealed ? `<div class="explain-box">${q.explain || (q.sample? 'Sample thinking: '+q.sample : 'Thoughtful, specific answers show real understanding — there\'s no single "correct" wording for this one.')}</div>` : '';
+
+  let actionBtn = '';
+  if(!quizState.revealed){
+    actionBtn = (q.type==='mc'||q.type==='tf')
+      ? `<button class="btn btn-primary" onclick="revealAnswer()" ${quizState.selected===undefined?'disabled':''} style="margin-top:16px;">Check Answer</button>`
+      : `<button class="btn btn-primary" onclick="submitFree()" style="margin-top:16px;">Submit Answer</button>`;
+  } else {
+    const isLast = quizState.idx === total-1;
+    actionBtn = `<button class="btn btn-primary" onclick="${isLast?'finishQuiz()':'nextQuestion()'}" style="margin-top:16px;">${isLast?'See Results':'Next Question'} →</button>`;
+  }
+
+  return `
+  <div class="back-row"><span class="back-btn" onclick="nav('lesson',{academyId:'${ac.id}',lessonId:'${l.id}'})">←</span><h2 style="font-size:16px; color:var(--text-dim);">Quick Check</h2></div>
+  <div class="quiz-progress" style="margin-top:14px;">${progressDots}</div>
+  <div class="q-text">${q.q}</div>
+  <div>${body}</div>
+  ${explainBox}
+  ${actionBtn}
+  `;
+}
+function selectMC(i){ quizState.selected = i; render(); }
+function selectTF(v){ quizState.selected = v; render(); }
+function revealAnswer(){
+  const ac = ACADEMIES.find(a=>a.id===quizState.academyId);
+  const l = ac.lessons.find(x=>x.id===quizState.lessonId);
+  const q = l.quiz[quizState.idx];
+  const correct = q.type==='mc' ? quizState.selected===q.correct : quizState.selected===q.correct;
+  if(correct) quizState.correctCount++;
+  quizState.revealed = true;
+  quizState.answers.push({correct});
+  render();
+}
+function submitFree(){
+  const val = document.getElementById('freeAnswer').value.trim();
+  quizState.freeText = val;
+  quizState.revealed = true;
+  if(val.length>10) quizState.correctCount++; // credit for genuine effort
+  quizState.answers.push({correct: val.length>10});
+  render();
+}
+function nextQuestion(){
+  quizState.idx++;
+  quizState.selected = undefined;
+  quizState.freeText = '';
+  quizState.revealed = false;
+  render();
+}
+function finishQuiz(){
+  const ac = ACADEMIES.find(a=>a.id===quizState.academyId);
+  const l = ac.lessons.find(x=>x.id===quizState.lessonId);
+  const total = l.quiz.length;
+  const score = quizState.correctCount;
+  state.quizScores[l.id] = {score, total};
+  state.totalQuizQuestions += total;
+  state.missionDone.test = true;
+  const wasComplete = !!state.completedLessons[l.id];
+  state.completedLessons[l.id] = true;
+  if(!wasComplete) state.missionDone.learn = true;
+  touchStreak();
+  saveState();
+  const xpGain = 20 + (score/total>=0.6 ? 30 : 10);
+  addXP(xpGain);
+  nav('quizresult', {academyId:ac.id, lessonId:l.id, score, total});
+}
+function viewQuizResult(academyId, lessonId, score, total){
+  const ac = ACADEMIES.find(a=>a.id===academyId);
+  const l = ac.lessons.find(x=>x.id===lessonId);
+  const pct = Math.round((score/total)*100);
+  return `
+  <div style="text-align:center; padding:30px 10px 10px;">
+    <div style="font-size:46px; margin-bottom:8px;">${pct>=70?'🏆':pct>=40?'📈':'🌱'}</div>
+    <h2 style="font-size:24px;">Quick Check Complete</h2>
+    <p style="color:var(--text-dim); margin-top:8px;">You scored ${score} / ${total} on "${l.title}"</p>
+  </div>
+  <div class="mastery-card" style="justify-content:center; margin-top:20px;">
+    <div class="ring-wrap">${ringSVG(pct,80,7)}<div class="ring-label"><div class="pct" style="font-size:19px;">${pct}%</div><div class="cap">Score</div></div></div>
+  </div>
+  <button class="btn btn-primary" style="margin-top:20px;" onclick="nav('academy',{academyId:'${ac.id}'})">Continue Roadmap</button>
+  <button class="btn btn-ghost" style="margin-top:10px;" onclick="nav('dashboard')">Back to Dashboard</button>
+  `;
+}
+
+/* Quiz Center */
+let qcState = {academy:'mixed', difficulty:'Beginner'};
+function viewQuizCenter(){
+  const options = ['mixed', ...ACADEMIES.map(a=>a.id)];
+  return `
+  <h2 style="font-size:22px; margin-bottom:4px;">🧠 Knowledge Test</h2>
+  <p style="color:var(--text-dim); font-size:13.5px; margin-bottom:18px;">Pick a subject to test what you actually remember.</p>
+  <div class="pill-row">
+    <div class="pill ${qcState.academy==='mixed'?'active':''}" onclick="setQC('academy','mixed')">Mixed Test</div>
+    ${ACADEMIES.map(a=>`<div class="pill ${qcState.academy===a.id?'active':''}" onclick="setQC('academy','${a.id}')">${a.icon} ${a.name}</div>`).join('')}
+  </div>
+  <div class="pill-row">
+    ${['Beginner','Intermediate','Advanced','Master'].map(d=>`<div class="pill ${qcState.difficulty===d?'active':''}" onclick="setQC('difficulty','${d}')">${d}</div>`).join('')}
+  </div>
+  <div class="content-block" style="margin-top:6px;">
+    <p style="font-size:13.5px; color:var(--text-dim);">${qcState.difficulty!=='Beginner' ? 'More advanced question banks unlock as you complete more lessons at the Beginner level — for now, this pulls from your current lesson quizzes.' : 'This test pulls quick-check questions from lessons you\'ve unlocked.'}</p>
+  </div>
+  <button class="btn btn-primary" onclick="startQuizCenterTest()">Start Test</button>
+  `;
+}
+function setQC(key,val){ qcState[key]=val; render(); }
+function startQuizCenterTest(){
+  let pool = [];
+  const academies = qcState.academy==='mixed' ? ACADEMIES : ACADEMIES.filter(a=>a.id===qcState.academy);
+  academies.forEach(ac=>{
+    ac.lessons.forEach(l=>{
+      if(state.completedLessons[l.id]){
+        l.quiz.forEach(q=> pool.push({...q, academyName:ac.name, academyIcon:ac.icon}));
+      }
+    });
+  });
+  if(pool.length===0){
+    showToast('Complete a lesson first to unlock its questions');
+    return;
+  }
+  pool = pool.sort(()=>Math.random()-0.5).slice(0,8);
+  qcTestState = {pool, idx:0, correct:0, revealed:false};
+  nav('qctest');
+}
+let qcTestState = null;
+function viewQCTest(){
+  if(!qcTestState) return `<p>No test in progress.</p>`;
+  const q = qcTestState.pool[qcTestState.idx];
+  const total = qcTestState.pool.length;
+  const progressDots = Array.from({length:total}).map((_,i)=>`<div class="dot ${i<=qcTestState.idx?'filled':''}"></div>`).join('');
+  let body='';
+  if(q.type==='mc'){
+    body = q.options.map((opt,i)=>{
+      let cls='opt-btn';
+      if(qcTestState.revealed){ if(i===q.correct) cls+=' correct'; else if(i===qcTestState.selected) cls+=' incorrect'; }
+      else if(i===qcTestState.selected) cls+=' selected';
+      return `<button class="${cls}" onclick="qcSelect(${i})" ${qcTestState.revealed?'disabled':''}>${opt}</button>`;
+    }).join('');
+  } else if(q.type==='tf'){
+    body = ['True','False'].map((opt,i)=>{
+      const val=i===0; let cls='opt-btn';
+      if(qcTestState.revealed){ if(val===q.correct) cls+=' correct'; else if(val===qcTestState.selected) cls+=' incorrect'; }
+      else if(val===qcTestState.selected) cls+=' selected';
+      return `<button class="${cls}" onclick="qcSelect(${val})" ${qcTestState.revealed?'disabled':''}>${opt}</button>`;
+    }).join('');
+  } else {
+    body = `<textarea class="short-answer" id="qcFree" placeholder="Write your answer..." ${qcTestState.revealed?'disabled':''}></textarea>`;
+  }
+  const explainBox = qcTestState.revealed ? `<div class="explain-box">${q.explain || 'Reflect on your own reasoning here — open questions are about depth of thought.'}</div>` : '';
+  let actionBtn='';
+  if(!qcTestState.revealed){
+    actionBtn = (q.type==='mc'||q.type==='tf')
+      ? `<button class="btn btn-primary" onclick="qcReveal()" ${qcTestState.selected===undefined?'disabled':''} style="margin-top:16px;">Check Answer</button>`
+      : `<button class="btn btn-primary" onclick="qcSubmitFree()" style="margin-top:16px;">Submit Answer</button>`;
+  } else {
+    const isLast = qcTestState.idx===total-1;
+    actionBtn = `<button class="btn btn-primary" onclick="${isLast?'qcFinish()':'qcNext()'}" style="margin-top:16px;">${isLast?'See Results':'Next Question'} →</button>`;
+  }
+  return `
+  <div class="back-row"><span class="back-btn" onclick="nav('quizcenter')">←</span><h2 style="font-size:16px; color:var(--text-dim);">${q.academyIcon} ${q.academyName}</h2></div>
+  <div class="quiz-progress" style="margin-top:14px;">${progressDots}</div>
+  <div class="q-text">${q.q}</div>
+  <div>${body}</div>
+  ${explainBox}
+  ${actionBtn}
+  `;
+}
+function qcSelect(v){ qcTestState.selected=v; render(); }
+function qcReveal(){
+  const q = qcTestState.pool[qcTestState.idx];
+  const correct = qcTestState.selected===q.correct;
+  if(correct) qcTestState.correct++;
+  qcTestState.revealed=true;
+  render();
+}
+function qcSubmitFree(){
+  const val = document.getElementById('qcFree').value.trim();
+  if(val.length>10) qcTestState.correct++;
+  qcTestState.revealed=true;
+  render();
+}
+function qcNext(){ qcTestState.idx++; qcTestState.selected=undefined; qcTestState.revealed=false; render(); }
+function qcFinish(){
+  state.totalQuizQuestions += qcTestState.pool.length;
+  saveState();
+  addXP(30);
+  nav('qcresult');
+}
+function viewQCResult(){
+  const total = qcTestState.pool.length;
+  const score = qcTestState.correct;
+  const pct = Math.round((score/total)*100);
+  const weakAreas = {};
+  qcTestState.pool.forEach((q,i)=>{ /* simplistic weak area note */ });
+  return `
+  <div style="text-align:center; padding:30px 10px 10px;">
+    <div style="font-size:46px; margin-bottom:8px;">${pct>=70?'🏆':pct>=40?'📈':'🌱'}</div>
+    <h2 style="font-size:24px;">Test Complete</h2>
+    <p style="color:var(--text-dim); margin-top:8px;">You scored ${score} / ${total}</p>
+  </div>
+  <div class="mastery-card" style="justify-content:center; margin-top:20px;">
+    <div class="ring-wrap">${ringSVG(pct,80,7)}<div class="ring-label"><div class="pct" style="font-size:19px;">${pct}%</div><div class="cap">Score</div></div></div>
+  </div>
+  <div class="content-block" style="margin-top:18px;">
+    <h4>Recommendation</h4>
+    <p>${pct<60? 'Revisit the lessons behind the questions you missed — review beats moving forward too fast.' : 'Strong result. Keep progressing to new lessons to keep growing your mastery.'}</p>
+  </div>
+  <button class="btn btn-primary" style="margin-top:8px;" onclick="nav('quizcenter')">Take Another Test</button>
+  <button class="btn btn-ghost" style="margin-top:10px;" onclick="nav('dashboard')">Back to Dashboard</button>
+  `;
+}
+
+/* Journal */
+function viewJournal(){
+  return `
+  <div class="section-label" style="margin-top:6px;"><h3>Knowledge Journal</h3><span class="see-all" onclick="nav('journalnew')">+ New</span></div>
+  <input type="text" id="journalSearch" placeholder="Search journal..." oninput="filterJournal(this.value)" style="width:100%; background:var(--bg-card); border:1px solid var(--line); border-radius:12px; padding:12px 14px; color:var(--text); font-family:inherit; margin-bottom:16px;">
+  <div id="journalList">${renderJournalList(state.journal)}</div>
+  `;
+}
+function renderJournalList(entries){
+  if(entries.length===0) return `<div class="empty-state"><div class="e-icon">📓</div><p>No journal entries yet.<br>Start reflecting on what you're learning.</p></div>`;
+  return entries.slice().reverse().map(e=>`
+    <div class="journal-entry">
+      <div class="j-date">${e.date}</div>
+      ${e.academy? `<span class="j-tag">#${e.academy}</span>`:''}
+      <div class="j-field-label">What I Learned</div><div class="j-field-val">${e.learned}</div>
+      ${e.surprised?`<div class="j-field-label">What Surprised Me</div><div class="j-field-val">${e.surprised}</div>`:''}
+      ${e.unclear?`<div class="j-field-label">Still Unclear</div><div class="j-field-val">${e.unclear}</div>`:''}
+      ${e.apply?`<div class="j-field-label">How I'll Apply This</div><div class="j-field-val">${e.apply}</div>`:''}
+      ${e.next?`<div class="j-field-label">Next Action</div><div class="j-field-val">${e.next}</div>`:''}
+    </div>
+  `).join('');
+}
+function filterJournal(q){
+  const lower = q.toLowerCase();
+  const filtered = state.journal.filter(e=>
+    (e.learned||'').toLowerCase().includes(lower) ||
+    (e.surprised||'').toLowerCase().includes(lower) ||
+    (e.unclear||'').toLowerCase().includes(lower) ||
+    (e.apply||'').toLowerCase().includes(lower) ||
+    (e.next||'').toLowerCase().includes(lower) ||
+    (e.academy||'').toLowerCase().includes(lower)
+  );
+  document.getElementById('journalList').innerHTML = renderJournalList(filtered);
+}
+function viewJournalNew(){
+  return `
+  <div class="back-row"><span class="back-btn" onclick="nav('journal')">←</span><h2 style="font-size:18px;">New Entry</h2></div>
+  <div class="field-group" style="margin-top:16px;">
+    <label>Academy Tag</label>
+    <select id="jAcademy" style="width:100%; background:var(--bg-card); border:1px solid var(--line); border-radius:12px; padding:12px 14px; color:var(--text); font-family:inherit;">
+      <option value="">None</option>
+      ${ACADEMIES.map(a=>`<option value="${a.name}">${a.icon} ${a.name}</option>`).join('')}
+    </select>
+  </div>
+  <div class="field-group"><label>What I Learned</label><textarea id="jLearned" placeholder="The key idea or concept..."></textarea></div>
+  <div class="field-group"><label>What Surprised Me</label><textarea id="jSurprised" placeholder="Anything unexpected..."></textarea></div>
+  <div class="field-group"><label>What I Don't Understand Yet</label><textarea id="jUnclear" placeholder="Gaps or confusion..."></textarea></div>
+  <div class="field-group"><label>How I Can Apply This</label><textarea id="jApply" placeholder="A real-world application..."></textarea></div>
+  <div class="field-group"><label>My Next Action</label><textarea id="jNext" placeholder="One concrete next step..."></textarea></div>
+  <button class="btn btn-primary" onclick="saveJournalEntry()">Save Entry</button>
+  `;
+}
+function saveJournalEntry(){
+  const learned = document.getElementById('jLearned').value.trim();
+  if(!learned){ showToast('Add what you learned first'); return; }
+  state.journal.push({
+    id: Date.now(),
+    date: new Date().toLocaleDateString(undefined,{month:'short',day:'numeric',year:'numeric'}),
+    academy: document.getElementById('jAcademy').value,
+    learned,
+    surprised: document.getElementById('jSurprised').value.trim(),
+    unclear: document.getElementById('jUnclear').value.trim(),
+    apply: document.getElementById('jApply').value.trim(),
+    next: document.getElementById('jNext').value.trim()
+  });
+  touchStreak();
+  saveState();
+  addXP(15);
+  nav('journal');
+}
+
+/* Progress */
+function viewProgress(){
+  const overall = overallMastery(state);
+  const lessonsTotal = ACADEMIES.reduce((s,a)=>s+a.lessons.length,0);
+  const lessonsDone = Object.keys(state.completedLessons).length;
+  const challengesTotal = ACADEMIES.reduce((s,a)=>s+a.challenges.length,0);
+  const challengesDone = Object.keys(state.completedChallenges).length;
+  const quizzesDone = Object.keys(state.quizScores).length;
+  const weekDays = ['S','M','T','W','T','F','S'];
+  const now = new Date();
+  const startOfWeek = new Date(now); startOfWeek.setDate(now.getDate()-now.getDay());
+  const weekCells = weekDays.map((d,i)=>{
+    const dt = new Date(startOfWeek); dt.setDate(startOfWeek.getDate()+i);
+    const ds = dt.toISOString().slice(0,10);
+    const active = state.daysActive.includes(ds);
+    return `<div class="week-day"><div class="wd-label">${d}</div><div class="wd-dot ${active?'active':''}">${active?'●':''}</div></div>`;
+  }).join('');
+
+  return `
+  <h2 style="font-size:22px; margin-bottom:16px;">My Progress</h2>
+  <div class="mastery-card">
+    <div class="ring-wrap">${ringSVG(overall)}<div class="ring-label"><div class="pct">${overall}%</div><div class="cap">Overall</div></div></div>
+    <div class="mastery-meta">
+      <div class="m-title">Total XP</div>
+      <div class="m-sub" style="font-family:var(--serif); font-size:18px; color:var(--text);">${state.xp} XP</div>
+    </div>
+  </div>
+
+  <div class="section-label"><h3 style="font-size:15px;">This Week</h3></div>
+  <div class="week-grid">${weekCells}</div>
+
+  <div class="progress-stat-grid">
+    <div class="stat-chip"><div class="s-label">Lessons</div><div class="s-value">${lessonsDone}/${lessonsTotal}</div></div>
+    <div class="stat-chip"><div class="s-label">Quizzes</div><div class="s-value">${quizzesDone}</div></div>
+    <div class="stat-chip"><div class="s-label">Challenges</div><div class="s-value">${challengesDone}/${challengesTotal}</div></div>
+    <div class="stat-chip"><div class="s-label">Longest Streak</div><div class="s-value">🔥 ${state.longestStreak}d</div></div>
+  </div>
+
+  <div class="section-label"><h3 style="font-size:15px;">Academy Mastery</h3></div>
+  <div class="content-block">
+  ${ACADEMIES.map(a=>{
+    const pct = masteryPct(state,a.id);
+    return `<div class="mastery-list-row">
+      <div class="icon">${a.icon}</div>
+      <div class="name">${a.name}</div>
+      <div class="track"><div class="track-fill" style="width:${pct}%;background:${a.color}"></div></div>
+      <div class="pct">${pct}%</div>
+    </div>`;
+  }).join('')}
+  </div>
+
+  <div class="section-label"><h3 style="font-size:15px;">Achievements</h3></div>
+  <div class="badge-grid">
+  ${ACHIEVEMENTS.map(a=>{
+    const unlocked = state.seenAchievements.includes(a.id);
+    return `<div class="badge ${unlocked?'':'locked'}"><span class="b-icon">${a.icon}</span><div class="b-name">${a.name}</div></div>`;
+  }).join('')}
+  </div>
+  `;
+}
+
+/* Learning Plan */
+function viewPlan(){
+  const days = ['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday'];
+  const defaultPlan = ['money','trading','communication','business','leadership','health','review'];
+  if(!state.learningPlan) state.learningPlan = defaultPlan;
+  return `
+  <h2 style="font-size:22px; margin-bottom:6px;">My Learning Plan</h2>
+  <p style="color:var(--text-dim); font-size:13.5px; margin-bottom:18px;">Choose your daily learning time, then follow your weekly rhythm.</p>
+  <div class="section-label" style="margin-top:0;"><h3 style="font-size:14px;">Daily Learning Time</h3></div>
+  <div class="pill-row">
+  ${[15,30,45,60,90].map(m=>`<div class="pill ${state.dailyMinutes===m?'active':''}" onclick="setDailyMinutes(${m})">${m} min</div>`).join('')}
+  </div>
+  <div class="section-label"><h3 style="font-size:14px;">Weekly Rhythm</h3></div>
+  <div class="card-list">
+  ${days.map((d,i)=>{
+    const key = state.learningPlan[i];
+    const ac = ACADEMIES.find(a=>a.id===key);
+    const label = ac ? ac.name : 'Review + Reflection';
+    const icon = ac ? ac.icon : '🔁';
+    return `<div class="lesson-row">
+      <div class="lesson-num">${icon}</div>
+      <div class="lesson-info"><div class="l-title">${d}</div><div class="l-meta">${label}</div></div>
+      <select onchange="setPlanDay(${i}, this.value)" style="background:var(--bg-elev); border:1px solid var(--line); border-radius:8px; color:var(--text); font-family:inherit; font-size:12px; padding:6px;">
+        <option value="review" ${key==='review'?'selected':''}>Review</option>
+        ${ACADEMIES.map(a=>`<option value="${a.id}" ${key===a.id?'selected':''}>${a.name}</option>`).join('')}
+      </select>
+    </div>`;
+  }).join('')}
+  </div>
+  `;
+}
+function setDailyMinutes(m){ state.dailyMinutes=m; saveState(); render(); }
+function setPlanDay(i,val){ if(!state.learningPlan) state.learningPlan=['money','trading','communication','business','leadership','health','review']; state.learningPlan[i]=val; saveState(); render(); }
+
+/* Mentor (static guided placeholder — no external API in this MVP) */
+function viewMentor(){
+  const prompts = ['Explain this to me simply.','Test me on trading.','Give me a business scenario.','Challenge my understanding.','Help me identify my weak areas.','Give me today\'s challenge.'];
+  return `
+  <h2 style="font-size:22px; margin-bottom:6px;">MASTERy Mentor</h2>
+  <p style="color:var(--text-dim); font-size:13.5px; margin-bottom:18px;">Your private guide — asks questions rather than handing you answers.</p>
+  <div class="content-block">
+    <h4>Try Asking</h4>
+    <ul>${prompts.map(p=>`<li>${p}</li>`).join('')}</ul>
+  </div>
+  <div class="content-block" style="border-color:var(--gold-soft);">
+    <p>The AI Mentor's live conversation isn't wired up yet in this first build — it's listed here as a placeholder for the next version. For now, use the Quiz Center to test yourself and the Journal to reflect with the same kind of guiding questions the Mentor would ask.</p>
+  </div>
+  <button class="btn btn-ghost" onclick="nav('quizcenter')">Go to Quiz Center</button>
+  `;
+}
+
+/* Settings */
+function viewSettings(){
+  return `
+  <h2 style="font-size:22px; margin-bottom:16px;">Settings</h2>
+  <div class="content-block">
+    <div class="field-group"><label>Name</label><input type="text" id="setName" value="${state.name}"></div>
+    <button class="btn btn-ghost btn-sm" onclick="saveName()">Save Name</button>
+  </div>
+  <div class="content-block">
+    <div class="settings-row"><div><div class="sr-label">Notifications</div><div class="sr-sub">Daily mission reminders</div></div>
+      <div class="switch ${state.notifications?'on':''}" onclick="toggleNotif()"></div>
+    </div>
+    <div class="settings-row"><div><div class="sr-label">Daily Learning Target</div><div class="sr-sub">${state.dailyMinutes} minutes</div></div>
+      <span class="see-all" onclick="nav('plan')">Edit</span>
+    </div>
+  </div>
+  <div class="content-block">
+    <div class="settings-row"><div><div class="sr-label">Export Journal</div><div class="sr-sub">Download as text</div></div>
+      <button class="btn btn-ghost btn-sm" onclick="exportJournal()">Export</button>
+    </div>
+    <div class="settings-row"><div><div class="sr-label">Reset Progress</div><div class="sr-sub" style="color:var(--danger);">This cannot be undone</div></div>
+      <button class="btn btn-ghost btn-sm" onclick="resetProgress()" style="color:var(--danger); border-color:var(--danger);">Reset</button>
+    </div>
+  </div>
+  `;
+}
+function saveName(){ state.name = document.getElementById('setName').value || 'Learner'; saveState(); showToast('Saved'); render(); }
+function toggleNotif(){ state.notifications = !state.notifications; saveState(); render(); }
+function exportJournal(){
+  if(state.journal.length===0){ showToast('No journal entries yet'); return; }
+  let text = 'MASTERy — Knowledge Journal Export\\n\\n';
+  state.journal.forEach(e=>{
+    text += `${e.date} ${e.academy?'#'+e.academy:''}\\nWhat I Learned: ${e.learned}\\nWhat Surprised Me: ${e.surprised}\\nStill Unclear: ${e.unclear}\\nHow I'll Apply This: ${e.apply}\\nNext Action: ${e.next}\\n\\n`;
+  });
+  const blob = new Blob([text], {type:'text/plain'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url; a.download = 'mastery-journal.txt'; a.click();
+  URL.revokeObjectURL(url);
+}
+function resetProgress(){
+  if(!confirm('Reset all progress? This cannot be undone.')) return;
+  const name = state.name;
+  state = defaultState();
+  state.name = name;
+  saveState();
+  nav('dashboard');
+  showToast('Progress reset');
+}
+
+/* Review (spaced repetition placeholder) */
+function viewReview(){
+  const doneLessons = [];
+  ACADEMIES.forEach(ac=>ac.lessons.forEach(l=>{ if(state.completedLessons[l.id]) doneLessons.push({ac,l}); }));
+  const dueForReview = doneLessons.slice(0, 3);
+  return `
+  <h2 style="font-size:22px; margin-bottom:6px;">Review</h2>
+  <p style="color:var(--text-dim); font-size:13.5px; margin-bottom:18px;">Bringing back what you've already learned, so it sticks.</p>
+  ${dueForReview.length===0? `<div class="empty-state"><div class="e-icon">🔁</div><p>Complete a few lessons first — review kicks in once you have things to revisit.</p></div>` :
+  dueForReview.map(({ac,l})=>`
+    <div class="lesson-row" onclick="nav('quiz',{academyId:'${ac.id}',lessonId:'${l.id}'})">
+      <div class="lesson-num">${ac.icon}</div>
+      <div class="lesson-info"><div class="l-title">${l.title}</div><div class="l-meta">Let's see if you still remember this</div></div>
+    </div>
+  `).join('')}
+  `;
+}
+
+/* ============ MAIN RENDER ============ */
+function render(){
+  const app = document.getElementById('app');
+  let html = '';
+  switch(route.view){
+    case 'dashboard': html = viewDashboard(); break;
+    case 'academies': html = viewAcademies(); break;
+    case 'academy': html = viewAcademy(route.academyId); break;
+    case 'lesson': html = viewLesson(route.academyId, route.lessonId, route.jumpQuiz); break;
+    case 'quiz': html = viewQuiz(route.academyId, route.lessonId); break;
+    case 'quizresult': html = viewQuizResult(route.academyId, route.lessonId, route.score, route.total); break;
+    case 'challenge': html = viewChallenge(route.academyId, route.idx); break;
+    case 'journal': html = viewJournal(); break;
+    case 'journalnew': html = viewJournalNew(); break;
+    case 'quizcenter': html = viewQuizCenter(); break;
+    case 'qctest': html = viewQCTest(); break;
+    case 'qcresult': html = viewQCResult(); break;
+    case 'progress': html = viewProgress(); break;
+    case 'plan': html = viewPlan(); break;
+    case 'mentor': html = viewMentor(); break;
+    case 'settings': html = viewSettings(); break;
+    case 'review': html = viewReview(); break;
+    default: html = viewDashboard();
+  }
+  const showTop = !['quiz','qctest','lesson','challenge','journalnew'].includes(route.view);
+  app.innerHTML = `
+    ${showTop ? `<div class="topbar">
+      <div class="brand">MASTERy<span>Personal Life University</span></div>
+      <div class="icon-btn" onclick="nav('settings')">⚙️</div>
+    </div>` : ''}
+    <div class="view">${html}</div>
+  `;
+  renderTabbar();
+  checkAchievements();
+}
+
+function renderTabbar(){
+  const tabs = [
+    {id:'dashboard', icon:'🏠', label:'Home'},
+    {id:'academies', icon:'🎓', label:'Academies'},
+    {id:'quizcenter', icon:'🧠', label:'Quiz'},
+    {id:'journal', icon:'📓', label:'Journal'},
+    {id:'progress', icon:'📊', label:'Progress'}
+  ];
+  const activeSet = {
+    dashboard:['dashboard'], academies:['academies','academy','lesson','quiz','quizresult','challenge'],
+    quizcenter:['quizcenter','qctest','qcresult'], journal:['journal','journalnew'], progress:['progress','plan','mentor','review']
+  };
+  document.getElementById('tabbar').innerHTML = tabs.map(t=>{
+    const active = (activeSet[t.id]||[t.id]).includes(route.view);
+    return `<div class="tab-btn ${active?'active':''}" onclick="nav('${t.id}')"><span class="t-icon">${t.icon}</span>${t.label}</div>`;
+  }).join('');
+}
+
+/* ============ INIT ============ */
+render();
+</script>
+</body>
+</html>
